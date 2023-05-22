@@ -45,7 +45,7 @@ const ButtonLoader = ({ primary = true, onlyIcon }: ButtonLoaderProps) => {
 };
 
 const style = {
-  main: "inline-block px-4 text-base font-semibold rounded-lg transition py-[10px]",
+  main: "inline-block text-base font-semibold rounded-lg transition",
   primary: "text-white bg-indigo-600 hover:bg-indigo-700",
   secondary: "bg-slate-100 text-slate-900 hover:bg-slate-200",
   tertiary: "bg-transparent text-slate-600 hover:bg-slate-100",
@@ -90,6 +90,7 @@ const Button = ({
           "opacity-75 bg-transparent hover:bg-transparent":
             disabled && variant === "tertiary",
 
+          "px-4 py-[10px]": !onlyIcon,
           "py-3 px-3": onlyIcon,
         },
         className

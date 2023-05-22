@@ -1,7 +1,7 @@
-import { InputHTMLAttributes, ReactNode } from "react";
-import Typography from "../typography";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
+import { InputHTMLAttributes, ReactNode } from "react";
+import Typography from "../typography";
 
 type Props = {
   iconLeft?: ReactNode;
