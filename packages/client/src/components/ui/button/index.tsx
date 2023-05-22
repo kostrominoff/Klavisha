@@ -5,10 +5,10 @@ import { AnimatePresence, MotionProps, motion } from "framer-motion";
 import { ButtonHTMLAttributes } from "react";
 import Icons from "../icons/index";
 
-type Variant = "primary" | "secondary" | "tertiary";
+export type ButtonVariants = "primary" | "secondary" | "tertiary";
 
 type Props = {
-  variant?: Variant;
+  variant?: ButtonVariants;
   loading?: boolean;
   disabled?: boolean;
   onlyIcon?: boolean;
@@ -51,7 +51,7 @@ const style = {
   tertiary: "bg-transparent text-slate-600 hover:bg-slate-100",
 };
 
-export const ButtonStyles = (variant: Variant) =>
+export const ButtonStyles = (variant: ButtonVariants) =>
   clsx(style.main, {
     [style.primary]: variant === "primary",
     [style.secondary]: variant === "secondary",
