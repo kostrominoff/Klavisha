@@ -29,7 +29,7 @@ const Typography = ({
   return (
     <Tag
       className={clsx(
-        "text-slate-900",
+        "text-slate-900 cursor-text",
         {
           "font-semibold md:text-5xl max-md:text-4xl": variant === "h1",
           "font-semibold md:text-4xl max-md:text-3xl": variant === "h2",
