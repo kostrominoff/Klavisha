@@ -18,7 +18,6 @@ const Input = ({
   iconRight,
   placeholder,
   fullWidth = false,
-  type = "text",
   ...props
 }: Props) => {
   return (
@@ -48,7 +47,6 @@ const Input = ({
         {iconLeft && <div className="pl-3">{iconLeft}</div>}
         <input
           className="px-3 w-full text-base rounded-lg border-none outline-none pointer-events-auto py-[10px] placeholder:text-slate-400 text-slate-900"
-          type="text"
           placeholder={placeholder}
           {...props}
         />
