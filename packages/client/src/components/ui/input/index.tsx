@@ -21,7 +21,7 @@ const Input = ({
   ...props
 }: Props) => {
   return (
-    <label
+    <div
       className={clsx("inline-block", {
         "w-full": fullWidth,
       })}
@@ -37,7 +37,7 @@ const Input = ({
       )}
       <div
         className={clsx(
-          "flex justify-center items-center bg-transparent rounded-lg transition pointer-events-none focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-200 border-[1px] border-slate-400 min-w-[200px] hover-within:border-slate-500 active-within:border-indigo-500 active-within:ring-2 active-within:ring-indigo-200",
+          "flex justify-center items-center bg-white rounded-lg transition pointer-events-none focus-within:border-indigo-500 focus-within:ring-2 focus-within:ring-indigo-200 border-[1px] border-slate-400 min-w-[200px] hover-within:border-slate-500 active-within:border-indigo-500 active-within:ring-2 active-within:ring-indigo-200",
           {
             "border-rose-400 focus-within:ring-rose-200 focus-within:border-rose-400 active-within:border-rose-400":
               error,
@@ -50,7 +50,7 @@ const Input = ({
           placeholder={placeholder}
           {...props}
         />
-        {iconRight && <div className="pr-3">{iconRight}</div>}
+        {iconRight && <div className="mr-3">{iconRight}</div>}
       </div>
       <AnimatePresence>
         {error && (
@@ -70,7 +70,7 @@ const Input = ({
           </motion.span>
         )}
       </AnimatePresence>
-    </label>
+    </div>
   );
 };
 
