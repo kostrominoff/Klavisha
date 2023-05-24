@@ -1,7 +1,13 @@
 "use client";
 
 import { AnimatePresence } from "framer-motion";
-import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  InputHTMLAttributes,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import Icons from "../icons";
 import Input from "../input";
 import DropdownMenu from "./menu";
@@ -28,7 +34,11 @@ export type DropdownProps<OptionValue> = (
   | NullableDropdown<OptionValue>
   | NotNullableDropdown<OptionValue>
 ) &
-  DropdownBaseType<OptionValue>;
+  DropdownBaseType<OptionValue> &
+  Omit<
+    InputHTMLAttributes<HTMLInputElement>,
+    "value" | "onChange" | "placeholder"
+  >;
 
 const Dropdown = <T,>({
   value,
@@ -36,6 +46,7 @@ const Dropdown = <T,>({
   nullable,
   onChange,
   options,
+  ...props
 }: DropdownProps<T>) => {
   const [localValue, setLocalValue] = useState<T | null>(value || null);
   const [isOpen, setIsOpen] = useState(false);
@@ -85,6 +96,7 @@ const Dropdown = <T,>({
             <Icons.arrowDown />
           </button>
         }
+        {...props}
       />
       <AnimatePresence>
         {isOpen && (
