@@ -16,6 +16,8 @@ import { IOption } from "./option.interface";
 type DropdownBaseType<OptionValue> = {
   placeholder?: string;
   options?: IOption<OptionValue>[];
+  error?: string;
+  label?: string;
 };
 
 type NotNullableDropdown<OptionValue> = {
@@ -46,6 +48,8 @@ const Dropdown = <T,>({
   nullable,
   onChange,
   options,
+  label,
+  error,
   ...props
 }: DropdownProps<T>) => {
   const [localValue, setLocalValue] = useState<T | null>(value || null);
@@ -91,6 +95,8 @@ const Dropdown = <T,>({
         onFocus={open}
         onChange={inputChangeHandler}
         placeholder={placeholder}
+        error={error}
+        label={label}
         iconRight={
           <button className="flex" onClick={open}>
             <Icons.arrowDown />

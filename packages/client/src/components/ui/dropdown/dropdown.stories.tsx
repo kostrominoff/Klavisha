@@ -27,6 +27,23 @@ export const Nullable: Story = {
   args: {
     options,
     placeholder: "Выберите элемент",
-    nullable: true
+    nullable: true,
+  },
+};
+
+export const WithLabel: Story = {
+  args: {
+    options,
+    placeholder: "Выберите элемент",
+    label: "It is label",
+  },
+};
+
+
+export const WithError: Story = {
+  args: {
+    options,
+    placeholder: "Выберите элемент",
+    error: "It is error",
   },
 };
