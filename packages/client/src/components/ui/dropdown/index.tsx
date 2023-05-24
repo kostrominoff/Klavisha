@@ -30,8 +30,6 @@ export type DropdownProps<OptionValue> = (
 ) &
   DropdownBaseType<OptionValue>;
 
-// FIX: Right icon (make clickable)
-
 const Dropdown = <T,>({
   value,
   placeholder,
@@ -83,7 +81,7 @@ const Dropdown = <T,>({
         onChange={inputChangeHandler}
         placeholder={placeholder}
         iconRight={
-          <button className="flex" onClick={() => console.log("fff")}>
+          <button className="flex" onClick={open}>
             <Icons.arrowDown />
           </button>
         }

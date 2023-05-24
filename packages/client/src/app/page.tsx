@@ -5,7 +5,6 @@ import { useState } from "react";
 
 const Home = () => {
   const [value, setValue] = useState<number | null>(null);
-  console.log("Out value", value);
   return (
     <div>
       <Dropdown
