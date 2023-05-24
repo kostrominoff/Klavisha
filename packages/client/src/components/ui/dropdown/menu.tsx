@@ -1,22 +1,21 @@
 import { motion } from "framer-motion";
-import { IOption } from "./option.interface";
+import { DropdownProps } from ".";
+import MenuItem from "./item";
 
 type Props<OptionValue> = {
-  value?: OptionValue | null;
-  onChange?: (value: OptionValue | null) => void;
-  options?: IOption<OptionValue>[];
   clearFilter: () => void;
-};
-
+} & DropdownProps<OptionValue>;
 const DropdownMenu = <T,>({
   value,
-  onChange = () => null,
+  onChange,
   options,
-  clearFilter
+  clearFilter,
+  nullable,
+  placeholder,
 }: Props<T>) => {
   return (
     <motion.div
-      className="overflow-hidden absolute top-full p-1 w-full rounded-xl shadow-lg mt-[2px]"
+      className="overflow-hidden overflow-y-scroll absolute top-full p-1 w-full rounded-xl shadow-lg max-h-[234px] mt-[2px]"
       initial={{
         opacity: 0,
       }}
@@ -28,17 +27,30 @@ const DropdownMenu = <T,>({
       }}
     >
       <ul className="flex flex-col gap-[2px]">
+        {nullable && (
+          <MenuItem
+            value={null}
+            onClick={(value) => {
+              onChange && onChange(value);
+              clearFilter();
+            }}
+            isSelected={value === null}
+          >
+            {placeholder}
+          </MenuItem>
+        )}
         {options?.map((option) => (
-          <li key={String(option.value)}>
-            <button
-              onClick={() => {
-                onChange(option.value);
-                clearFilter();
-              }}
-            >
-              {option.label}
-            </button>
-          </li>
+          <MenuItem
+            onClick={(value) => {
+              onChange && onChange(value);
+              clearFilter();
+            }}
+            isSelected={value === option.value}
+            value={option.value}
+            key={String(option.value)}
+          >
+            {option.label}
+          </MenuItem>
         ))}
       </ul>
     </motion.div>

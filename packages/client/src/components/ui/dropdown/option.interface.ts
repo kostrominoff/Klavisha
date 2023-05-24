@@ -1,5 +1,5 @@
 
 export interface IOption<Value> {
-  value: Value | null;
+  value: Value;
   label: string | number;
 }
