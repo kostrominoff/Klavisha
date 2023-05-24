@@ -64,7 +64,7 @@ const Input = ({
             exit={{
               height: 0,
             }}
-            className="block overflow-hidden text-xs text-rose-600"
+            className="block overflow-hidden text-base text-rose-600"
           >
             {error}
           </motion.span>
