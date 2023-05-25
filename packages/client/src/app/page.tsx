@@ -4,7 +4,8 @@ import Dropdown from "@/components/ui/dropdown";
 import { useState } from "react";
 
 const Home = () => {
-  const [value, setValue] = useState<number | null>(null);
+  const [value, setValue] = useState<number | null>(3);
+  console.log(value);
   return (
     <div>
       <Dropdown
