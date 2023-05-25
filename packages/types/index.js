@@ -16,3 +16,5 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./shared-types/user.type"), exports);
 __exportStar(require("./shared-types/roles.enum"), exports);
+__exportStar(require("./shared-types/dto/create-user.dto"), exports);
+__exportStar(require("./shared-types/dto/update-user.dto"), exports);
