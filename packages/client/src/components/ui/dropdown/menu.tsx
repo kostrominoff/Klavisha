@@ -44,8 +44,8 @@ const DropdownMenu = <T,>({
         )}
         {options?.map((option) => (
           <MenuItem
-            onClick={(value) => {
-              onChange && onChange(value);
+            onClick={(newValue) => {
+              onChange && onChange(newValue);
               clearFilter();
             }}
             isSelected={

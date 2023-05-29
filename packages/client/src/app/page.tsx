@@ -20,7 +20,7 @@ const Home = () => {
             label: "Второй",
           },
           {
-            value: 2,
+            value: 3,
             label: "Третий",
           },
         ]}
