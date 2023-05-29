@@ -18,6 +18,7 @@ type DropdownBaseType<OptionValue> = {
   options?: IOption<OptionValue>[];
   error?: string;
   label?: string;
+  limit?: number;
 };
 
 type NotNullableDropdown<OptionValue> = {
@@ -50,6 +51,7 @@ const Dropdown = <T,>({
   options,
   label,
   error,
+  limit,
   ...props
 }: DropdownProps<T>) => {
   const [localValue, setLocalValue] = useState<T | null>(value || null);
@@ -77,12 +79,14 @@ const Dropdown = <T,>({
     if (!onChange) return;
 
     if (localValue) onChange(localValue);
-    else if (nullable && !localValue) onChange(localValue);
-  }, [localValue, onChange, nullable]);
+    else if (nullable && !localValue && !filter) onChange(localValue);
+  }, [localValue, onChange, nullable, filter]);
 
-  const filteredOptions = options?.filter((option) =>
-    option.label.toString().toLowerCase().includes(filter.toLowerCase())
-  );
+  const filteredOptions = options
+    ?.filter((option) =>
+      option.label.toString().toLowerCase().includes(filter.toLowerCase())
+    )
+    .slice(0, limit);
 
   return (
     <div className="inline-block relative" onBlur={close}>
