@@ -15,7 +15,7 @@ export class UserEntity implements User {
   email: string;
   @Column()
   password: string;
-  @Column({ default: [Roles.STUDENT], type: "enum", enum: Roles,array: true })
+  @Column({ default: [Roles.STUDENT], type: 'enum', enum: Roles, array: true })
   roles: Roles[];
   @Column()
   firstname: string;
