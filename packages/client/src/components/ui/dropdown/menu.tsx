@@ -53,6 +53,7 @@ const DropdownMenu = <T,>({
                 ? value.includes(option.value)
                 : value === option.value
             }
+            multiple={multiple}
             value={option.value}
             key={String(option.value)}
           >

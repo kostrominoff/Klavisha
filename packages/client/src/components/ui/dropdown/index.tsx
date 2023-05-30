@@ -3,6 +3,7 @@
 import { AnimatePresence } from "framer-motion";
 import {
   ChangeEvent,
+  FocusEvent,
   InputHTMLAttributes,
   useCallback,
   useEffect,
@@ -73,40 +74,30 @@ const Dropdown = <T,>({
   const [isOpen, setIsOpen] = useState(false);
   const [filter, setFilter] = useState("");
 
-  const close = useCallback(() => {
-    setIsOpen(false);
-  }, []);
-
   const open = useCallback(() => {
     setIsOpen(true);
   }, []);
 
+  const toggleOpen = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
+
   const inputChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     setFilter(e.target.value);
-    if (!multiple && !Array.isArray(localValue)) setLocalValue(null);
   }, []);
 
   const clearFilter = useCallback(() => {
     setFilter("");
   }, []);
 
+  const blurHandler = useCallback((event: FocusEvent<HTMLInputElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setIsOpen(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (!onChange) return;
-
-    console.log(multiple && Array.isArray(localValue), 1);
-    console.log(
-      !nullable && !multiple && !Array.isArray(localValue) && localValue,
-      2
-    );
-    console.log(
-      !multiple &&
-        !Array.isArray(localValue) &&
-        nullable &&
-        localValue === null,
-      3
-    );
-
-    // FIX: no event after search
 
     if (multiple && Array.isArray(localValue)) onChange(localValue);
     else if (!nullable && !multiple && !Array.isArray(localValue) && localValue)
@@ -127,7 +118,7 @@ const Dropdown = <T,>({
     .slice(0, limit);
 
   return (
-    <div className="inline-block relative" onBlur={close}>
+    <div className="inline-block relative" onBlur={blurHandler}>
       <Input
         value={
           filter ||
@@ -139,14 +130,14 @@ const Dropdown = <T,>({
         onFocus={open}
         onChange={inputChangeHandler}
         placeholder={
-          multiple && Array.isArray(localValue)
+          multiple && Array.isArray(localValue) && localValue.length
             ? `${localValue.length} выбрано`
             : placeholder
         }
         error={error}
         label={label}
         iconRight={
-          <button className="flex" onClick={open}>
+          <button className="flex" onClick={toggleOpen}>
             <Icons.arrowDown />
           </button>
         }
@@ -158,21 +149,22 @@ const Dropdown = <T,>({
             onChange={(newValue) =>
               setLocalValue((prev) => {
                 if (multiple && Array.isArray(prev) && newValue) {
-                  console.log("multiple");
+                  // If multiple
                   if (prev.includes(newValue)) {
-                    console.log("includes");
+                    // Remove element
                     return prev.filter((element) => element !== newValue);
                   } else {
-                    console.log("not includes (add item)");
+                    // Add element
                     return [...prev, newValue];
                   }
                 } else {
-                  console.log("Just set value");
+                  // If not multiple
                   return newValue;
                 }
               })
             }
             value={localValue}
+            multiple={multiple}
             options={filteredOptions}
             clearFilter={clearFilter}
             placeholder={placeholder}
