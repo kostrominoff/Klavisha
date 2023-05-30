@@ -88,11 +88,14 @@ const Dropdown = <T,>({
     setFilter("");
   }, []);
 
-  const blurHandler = useCallback((event: FocusEvent<HTMLInputElement>) => {
-    if (!event.currentTarget.contains(event.relatedTarget)) {
-      setIsOpen(false);
-    }
-  }, []);
+  const blurHandler = useCallback(
+    (event: FocusEvent<HTMLInputElement>) => {
+      if (!multiple) return setIsOpen(false);
+
+      if (!event.currentTarget.contains(event.relatedTarget)) setIsOpen(false);
+    },
+    [multiple]
+  );
 
   useEffect(() => {
     if (!onChange) return;
