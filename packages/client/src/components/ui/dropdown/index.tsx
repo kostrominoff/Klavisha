@@ -54,8 +54,6 @@ export type DropdownProps<OptionValue> = (
     "value" | "onChange" | "placeholder"
   >;
 
-// TODO: Clear code and make selected icon if multiple
-
 const Dropdown = <T,>({
   value,
   placeholder,

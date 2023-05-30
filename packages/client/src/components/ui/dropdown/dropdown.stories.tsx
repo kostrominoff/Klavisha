@@ -23,6 +23,15 @@ export const Default: Story = {
   },
 };
 
+export const Multiple: Story = {
+  args: {
+    placeholder: "Выберите элементы",
+    options,
+    multiple: true,
+    nullable: false, // Important
+  },
+};
+
 export const WithLimit: Story = {
   args: {
     placeholder: "Выберите элемент",
