@@ -12,3 +12,8 @@ npm run dev -w client
 ```
 npm run storybook -w client
 ```
+
+## Server
+```
+npm run start:dev -w server
+```
