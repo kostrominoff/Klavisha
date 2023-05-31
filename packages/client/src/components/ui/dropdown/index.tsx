@@ -5,6 +5,7 @@ import {
   ChangeEvent,
   FocusEvent,
   InputHTMLAttributes,
+  Ref,
   useCallback,
   useEffect,
   useState,
@@ -64,8 +65,9 @@ const Dropdown = <T,>({
   multiple,
   error,
   limit,
+  customRef,
   ...props
-}: DropdownProps<T>) => {
+}: DropdownProps<T> & { customRef?: Ref<HTMLInputElement> }) => {
   const [localValue, setLocalValue] = useState<T[] | T | null>(
     value || multiple ? [] : null
   );
@@ -118,25 +120,28 @@ const Dropdown = <T,>({
     )
     .slice(0, limit);
 
+  const inputPlaceholder = (): string => {
+    if (multiple && Array.isArray(localValue) && localValue.length)
+      return `${localValue.length} выбрано`;
+
+    const singleValue = options?.find(
+      (option) => option.value === localValue
+    )?.label;
+    if (singleValue) return String(singleValue);
+
+    return placeholder || "";
+  };
+
   return (
     <div className="inline-block relative" onBlur={blurHandler}>
       <Input
-        value={
-          filter ||
-          (!multiple &&
-            !Array.isArray(localValue) &&
-            options?.find((option) => option.value === localValue)?.label) ||
-          ""
-        }
+        value={filter}
         onFocus={open}
         onChange={inputChangeHandler}
-        placeholder={
-          multiple && Array.isArray(localValue) && localValue.length
-            ? `${localValue.length} выбрано`
-            : placeholder
-        }
+        placeholder={inputPlaceholder()}
         error={error}
         label={label}
+        ref={customRef}
         iconRight={
           <button type="button" className="flex" onClick={toggleOpen}>
             <Icons.arrowDown />
