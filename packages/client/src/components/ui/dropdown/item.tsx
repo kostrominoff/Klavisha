@@ -22,6 +22,7 @@ const MenuItem = <T,>({
   return (
     <li className="block">
       <button
+        type="button"
         className={clsx(
           "block px-4 w-full text-left rounded-lg transition cursor-pointer py-[9px] hover:bg-slate-100",
           {

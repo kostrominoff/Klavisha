@@ -138,7 +138,7 @@ const Dropdown = <T,>({
         error={error}
         label={label}
         iconRight={
-          <button className="flex" onClick={toggleOpen}>
+          <button type="button" className="flex" onClick={toggleOpen}>
             <Icons.arrowDown />
           </button>
         }
