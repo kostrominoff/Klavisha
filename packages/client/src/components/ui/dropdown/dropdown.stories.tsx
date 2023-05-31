@@ -23,6 +23,23 @@ export const Default: Story = {
   },
 };
 
+export const Multiple: Story = {
+  args: {
+    placeholder: "Выберите элементы",
+    options,
+    multiple: true,
+    nullable: false, // Important
+  },
+};
+
+export const WithLimit: Story = {
+  args: {
+    placeholder: "Выберите элемент",
+    options,
+    limit: 1,
+  },
+};
+
 export const Nullable: Story = {
   args: {
     options,
@@ -38,7 +55,6 @@ export const WithLabel: Story = {
     label: "It is label",
   },
 };
-
 
 export const WithError: Story = {
   args: {

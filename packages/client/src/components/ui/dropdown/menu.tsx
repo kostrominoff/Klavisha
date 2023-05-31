@@ -2,11 +2,14 @@ import { motion } from "framer-motion";
 import { DropdownProps } from ".";
 import MenuItem from "./item";
 
-type Props<OptionValue> = {
+type Props<OptionValue> = Omit<DropdownProps<OptionValue>, "onChange"> & {
   clearFilter: () => void;
-} & DropdownProps<OptionValue>;
+  onChange: (value: OptionValue | null) => void;
+};
+
 const DropdownMenu = <T,>({
   value,
+  multiple,
   onChange,
   options,
   clearFilter,
@@ -41,11 +44,16 @@ const DropdownMenu = <T,>({
         )}
         {options?.map((option) => (
           <MenuItem
-            onClick={(value) => {
-              onChange && onChange(value);
+            onClick={(newValue) => {
+              onChange && onChange(newValue);
               clearFilter();
             }}
-            isSelected={value === option.value}
+            isSelected={
+              multiple && Array.isArray(value)
+                ? value.includes(option.value)
+                : value === option.value
+            }
+            multiple={multiple}
             value={option.value}
             key={String(option.value)}
           >
