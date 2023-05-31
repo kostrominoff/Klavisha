@@ -5,11 +5,11 @@ export const TypeormConfig = (
   configService: ConfigService,
 ): TypeOrmModuleOptions => ({
   type: 'postgres',
-  host: configService.get('POSTGRES_HOST'),
+  host: configService.getOrThrow('POSTGRES_HOST'),
   port: 5432,
-  username: configService.get('POSTGRES_USER'),
-  password: configService.get('POSTGRES_PASSWORD'),
-  database: configService.get('POSTGRES_DB'),
+  username: configService.getOrThrow('POSTGRES_USER'),
+  password: configService.getOrThrow('POSTGRES_PASSWORD'),
+  database: configService.getOrThrow('POSTGRES_DB'),
   synchronize: true,
   autoLoadEntities: true,
 });

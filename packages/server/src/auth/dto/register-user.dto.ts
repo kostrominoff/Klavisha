@@ -1,8 +1,14 @@
-import { ICreateUserDto, Roles } from '@klavisha/types';
+import { IRegisterUserDto } from '@klavisha/types';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNumber, IsString, MinLength } from 'class-validator';
 
-export class CreateUserDto implements ICreateUserDto {
+export class RegisterUserDto implements IRegisterUserDto {
+  @ApiProperty({
+    description: 'Номер группы',
+    example: 1,
+  })
+  @IsNumber({}, { message: 'Проверьте группу!' })
+  groupId: number;
   @ApiProperty({
     description: 'Почта',
     example: 'myemail@example.com',
@@ -15,13 +21,6 @@ export class CreateUserDto implements ICreateUserDto {
   })
   @MinLength(8, { message: 'Пароль должен иметь не менее 8 символов!' })
   password: string;
-  @ApiProperty({
-    description: 'Роли пользователя',
-    enum: Roles,
-    isArray: true,
-    nullable: true,
-  })
-  roles?: Roles[];
   @ApiProperty({
     description: 'Имя пользователя',
   })
