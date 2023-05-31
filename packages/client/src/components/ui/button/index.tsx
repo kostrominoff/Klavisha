@@ -39,7 +39,7 @@ const ButtonLoader = ({ primary = true, onlyIcon }: ButtonLoaderProps) => {
         marginLeft: 0,
       }}
     >
-      <Icons.buttonLoading onlyIcon={onlyIcon} primary={primary} />
+      <Icons.ButtonLoading onlyIcon={onlyIcon} primary={primary} />
     </motion.span>
   );
 };
