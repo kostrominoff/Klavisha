@@ -40,5 +40,6 @@ export class CreateInstitutionDto implements ICreateInstitutionDto {
     description: 'Город',
     example: 'Пермь',
   })
-  city?: string;
+  @IsString({ message: 'Введите город!' })
+  city: string;
 }

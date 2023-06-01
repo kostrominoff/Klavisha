@@ -4,7 +4,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -24,8 +23,8 @@ export class InstitutionEntity implements Institution {
   description?: string;
   @Column({ nullable: true })
   website?: string;
-  @Column({ nullable: true })
-  city?: string;
+  @Column()
+  city: string;
   @CreateDateColumn()
   createdAt: Date;
   @UpdateDateColumn()

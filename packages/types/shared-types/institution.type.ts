@@ -5,7 +5,7 @@ export type Institution = {
   photo?: string;
   description?: string;
   website?: string;
-  city?: string;
+  city: string;
   createdAt: Date;
   updatedAt: Date;
 };

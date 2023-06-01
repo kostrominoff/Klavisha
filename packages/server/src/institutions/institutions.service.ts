@@ -1,10 +1,20 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InstitutionEntity } from './entities/institution.entity';
-import { Repository } from 'typeorm';
-import { IUpdateInstitutionDto } from '@klavisha/types';
+import { Like, Repository } from 'typeorm';
 import { NOT_FOUND as INSTITUTION_NOT_FOUND } from 'src/errors/institution.errors';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
+import { UpdateInstitutionDto } from './dto/update-institution.dto';
+import { NO_ACCESS } from 'src/errors/access.errors';
+
+type SearchParams = {
+  name?: string;
+  city?: string;
+};
 
 @Injectable()
 export class InstitutionsService {
@@ -13,16 +23,27 @@ export class InstitutionsService {
     private readonly institutionRepository: Repository<InstitutionEntity>,
   ) {}
 
-  async findAll(limit = 10, page = 1) {
+  async findAll(limit = 10, page = 1, { name, city }: SearchParams) {
     const [institutions, count] = await this.institutionRepository.findAndCount(
       {
         skip: (page - 1) * limit,
         take: limit,
+        where: {
+          name: Like(`%${name}%`),
+          city: Like(`%${city}%`),
+        },
+        select: {
+          city: true,
+          name: true,
+          photo: true,
+        },
       },
     );
+    const pages = Math.floor(count / limit) + 1;
     return {
       institutions,
       count,
+      pages,
     };
   }
 
@@ -47,7 +68,7 @@ export class InstitutionsService {
 
   async update(
     institutionId: number,
-    { owners, ...dto }: IUpdateInstitutionDto,
+    { owners, ...dto }: UpdateInstitutionDto,
   ) {
     const institution = await this.institutionRepository.update(
       {
@@ -69,5 +90,11 @@ export class InstitutionsService {
     return await this.institutionRepository.delete({
       id: id,
     });
+  }
+
+  async checkIsOwner(id: number, userId: number) {
+    const institution = await this.findOneById(id);
+    if (!institution.owners.map(({ id }) => id).includes(userId))
+      throw new ForbiddenException(NO_ACCESS);
   }
 }
