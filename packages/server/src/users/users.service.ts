@@ -13,21 +13,10 @@ export class UsersService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async create({
-    firstname,
-    secondname,
-    fathername,
-    password,
-    roles,
-    email,
-  }: CreateUserDto) {
+  async create({ password, ...dto }: CreateUserDto) {
     const hashedPassword = await hash(password, 10);
     return await this.userRepository.save({
-      firstname,
-      secondname,
-      fathername,
-      roles,
-      email,
+      ...dto,
       password: hashedPassword,
     });
   }
@@ -48,34 +37,15 @@ export class UsersService {
     });
   }
 
-  async update(
-    id: number,
-    {
-      firstname,
-      secondname,
-      fathername,
-      password,
-      roles,
-      email,
-      birthday,
-      avatar,
-      phone,
-    }: UpdateUserDto,
-  ) {
+  async update(id: number, { password, ...dto }: UpdateUserDto) {
+    if (password) password = await hash(password, 10);
     return await this.userRepository.update(
       {
         id,
       },
       {
-        firstname,
-        secondname,
-        fathername,
+        ...dto,
         password,
-        roles,
-        email,
-        birthday,
-        avatar,
-        phone,
       },
     );
   }

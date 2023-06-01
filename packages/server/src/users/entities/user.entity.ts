@@ -1,8 +1,10 @@
 import { Roles, User } from '@klavisha/types';
+import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -33,4 +35,10 @@ export class UserEntity implements User {
   createdAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => InstitutionEntity, (institution) => institution.owner, {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  institutions: InstitutionEntity[];
 }

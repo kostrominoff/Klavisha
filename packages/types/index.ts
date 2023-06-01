@@ -5,3 +5,6 @@ export * from "./shared-types/dto/update-user.dto";
 export * from "./shared-types/dto/login-user.dto";
 export * from "./shared-types/dto/register-user.dto";
 export * from "./shared-types/tokens.type";
+export * from "./shared-types/institution.type";
+export * from "./shared-types/dto/create-institution.dto";
+export * from "./shared-types/dto/update-institution.dto";
