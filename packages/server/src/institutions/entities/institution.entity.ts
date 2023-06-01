@@ -4,7 +4,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -30,6 +31,6 @@ export class InstitutionEntity implements Institution {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => UserEntity, (user) => user.institutions)
-  owner: UserEntity;
+  @ManyToMany(() => UserEntity, (user) => user.institutions)
+  owners: UserEntity[];
 }

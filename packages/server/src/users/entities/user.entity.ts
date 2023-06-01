@@ -4,7 +4,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -17,8 +18,8 @@ export class UserEntity implements User {
   email: string;
   @Column()
   password: string;
-  @Column({ default: [Roles.STUDENT], type: 'enum', enum: Roles, array: true })
-  roles: Roles[];
+  @Column({ default: Roles.USER, type: 'enum', enum: Roles })
+  role: Roles;
   @Column()
   firstname: string;
   @Column()
@@ -36,9 +37,9 @@ export class UserEntity implements User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => InstitutionEntity, (institution) => institution.owner, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
+  @ManyToMany(() => InstitutionEntity, (institution) => institution.owners, {
+    eager: true,
   })
+  @JoinTable()
   institutions: InstitutionEntity[];
 }

@@ -26,6 +26,9 @@ export class UsersService {
       where: {
         id,
       },
+      relations: {
+        institutions: true,
+      },
     });
   }
 
@@ -34,6 +37,7 @@ export class UsersService {
       where: {
         email,
       },
+      loadRelationIds: true,
     });
   }
 

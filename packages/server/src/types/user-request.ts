@@ -1,3 +1,3 @@
-import { UserWithoutPassword } from '@klavisha/types';
+import { UserEntity } from 'src/users/entities/user.entity';
 
-export type UserRequest = Request & { user: UserWithoutPassword };
+export type UserRequest = Request & { user: Omit<UserEntity, 'password'> };

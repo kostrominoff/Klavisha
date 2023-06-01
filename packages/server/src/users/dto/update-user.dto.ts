@@ -14,12 +14,11 @@ export class UpdateUserDto implements IUpdateUserDto {
   })
   phone?: string;
   @ApiProperty({
-    description: 'Роли пользователя',
+    description: 'Роль пользователя',
     enum: Roles,
-    isArray: true,
     nullable: true,
   })
-  roles?: Roles[];
+  role: Roles;
   @ApiProperty({
     description: 'Ссылка на аватар',
     nullable: true,

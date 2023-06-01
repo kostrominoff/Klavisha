@@ -16,9 +16,10 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiCookieAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/auth/guards/auth.guard';
-import { Roles } from '@klavisha/types';
+import { GuardRoles, Roles } from '@klavisha/types';
 import { CurrentUser } from './decorators/user.decorator';
 import { NO_ACCESS } from 'src/errors/access.errors';
+import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
 
 @ApiTags('Пользователи')
 @ApiCookieAuth('accessToken')
@@ -46,7 +47,9 @@ export class UsersController {
   @Auth()
   @Get(':id')
   async getOne(@Param('id', ParseIntPipe) userId: number) {
-    return await this.usersService.findOneById(userId);
+    const user = await this.usersService.findOneById(userId);
+    delete user.password;
+    return user;
   }
 
   @ApiResponse({
@@ -66,7 +69,7 @@ export class UsersController {
     description: 'Нет доступа',
   })
   @HttpCode(HttpStatus.CREATED)
-  @Auth([Roles.ADMIN, Roles.INSTITUTION_ADMIN])
+  @Auth([GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN])
   @Post()
   async create(@Body() dto: CreateUserDto) {
     return await this.usersService.create(dto);
@@ -91,12 +94,11 @@ export class UsersController {
     @Param('id', ParseIntPipe) userId: number,
     @Body() dto: UpdateUserDto,
     @CurrentUser('id') currentUserId: number,
-    @CurrentUser('roles') currentUserRoles: Roles[],
+    @CurrentUser('role') currentUserRole: Roles,
+    @CurrentUser('institutions') institutions: InstitutionEntity[],
   ) {
-    if (
-      !currentUserRoles.includes(Roles.INSTITUTION_ADMIN) ||
-      !currentUserRoles.includes(Roles.ADMIN)
-    ) {
+    if (!institutions?.length || currentUserRole !== Roles.ADMIN) {
+      delete dto.role;
       const userUpdate = await this.usersService.findOneById(userId);
       if (userUpdate.id !== currentUserId) {
         throw new ForbiddenException(NO_ACCESS);
@@ -119,17 +121,17 @@ export class UsersController {
     description: 'Нет доступа',
   })
   @HttpCode(HttpStatus.OK)
-  @Auth([Roles.ADMIN, Roles.INSTITUTION_ADMIN])
+  @Auth([GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN])
   @Delete(':id')
   async delete(
     @Param('id', ParseIntPipe) userId: number,
     @CurrentUser('id') currentUserId: number,
-    @CurrentUser('roles') currentUserRoles: Roles[],
+    @CurrentUser('institutions') institutions: InstitutionEntity[],
   ) {
     // Institution admin cannot delete admin
-    if (currentUserRoles.includes(Roles.INSTITUTION_ADMIN)) {
+    if (institutions?.length) {
       const deleteUser = await this.usersService.findOneById(userId);
-      if (deleteUser.roles.includes(Roles.ADMIN))
+      if (deleteUser.role === Roles.ADMIN)
         throw new ForbiddenException(NO_ACCESS);
     }
     // Cannot delete itself

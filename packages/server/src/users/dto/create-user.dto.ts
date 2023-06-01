@@ -16,12 +16,11 @@ export class CreateUserDto implements ICreateUserDto {
   @MinLength(8, { message: 'Пароль должен иметь не менее 8 символов!' })
   password: string;
   @ApiProperty({
-    description: 'Роли пользователя',
+    description: 'Роль пользователя',
     enum: Roles,
-    isArray: true,
     nullable: true,
   })
-  roles?: Roles[];
+  role?: Roles;
   @ApiProperty({
     description: 'Имя пользователя',
   })

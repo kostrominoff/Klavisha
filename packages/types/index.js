@@ -20,3 +20,7 @@ __exportStar(require("./shared-types/dto/create-user.dto"), exports);
 __exportStar(require("./shared-types/dto/update-user.dto"), exports);
 __exportStar(require("./shared-types/dto/login-user.dto"), exports);
 __exportStar(require("./shared-types/dto/register-user.dto"), exports);
+__exportStar(require("./shared-types/tokens.type"), exports);
+__exportStar(require("./shared-types/institution.type"), exports);
+__exportStar(require("./shared-types/dto/create-institution.dto"), exports);
+__exportStar(require("./shared-types/dto/update-institution.dto"), exports);

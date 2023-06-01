@@ -2,21 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InstitutionEntity } from './entities/institution.entity';
 import { Repository } from 'typeorm';
-import { UsersService } from 'src/users/users.service';
-import {
-  ICreateInstitutionDto,
-  IUpdateInstitutionDto,
-  Roles,
-} from '@klavisha/types';
-import { NOT_FOUND } from 'src/errors/user.errors';
+import { IUpdateInstitutionDto } from '@klavisha/types';
 import { NOT_FOUND as INSTITUTION_NOT_FOUND } from 'src/errors/institution.errors';
+import { CreateInstitutionDto } from './dto/create-institution.dto';
 
 @Injectable()
 export class InstitutionsService {
   constructor(
     @InjectRepository(InstitutionEntity)
     private readonly institutionRepository: Repository<InstitutionEntity>,
-    private readonly usersService: UsersService,
   ) {}
 
   async findAll(limit = 10, page = 1) {
@@ -40,14 +34,12 @@ export class InstitutionsService {
     });
   }
 
-  async create({ ownerId, ...dto }: ICreateInstitutionDto) {
-    await this.updateUserRole(ownerId, true);
-
+  async create({ owners, ...dto }: CreateInstitutionDto) {
     const institution = await this.institutionRepository.save({
       ...dto,
-      owner: {
-        id: ownerId,
-      },
+      owners: owners.map((owner) => ({
+        id: owner,
+      })),
     });
 
     return institution;
@@ -55,23 +47,15 @@ export class InstitutionsService {
 
   async update(
     institutionId: number,
-    { ownerId, ...dto }: IUpdateInstitutionDto,
+    { owners, ...dto }: IUpdateInstitutionDto,
   ) {
-    const oldInstitution = await this.findOneById(institutionId);
-    if (oldInstitution.owner.id !== ownerId) {
-      await this.updateUserRole(ownerId, true);
-      await this.updateUserRole(oldInstitution.owner.id);
-    }
-
     const institution = await this.institutionRepository.update(
       {
         id: institutionId,
       },
       {
         ...dto,
-        owner: {
-          id: ownerId,
-        },
+        owners: owners.map((owner) => ({ id: owner })),
       },
     );
 
@@ -82,30 +66,8 @@ export class InstitutionsService {
     const institution = await this.findOneById(id);
     if (!institution) throw new NotFoundException(INSTITUTION_NOT_FOUND);
 
-    await this.updateUserRole(institution.owner.id);
-
     return await this.institutionRepository.delete({
       id: id,
     });
-  }
-
-  private async updateUserRole(userId: number, setRole?: boolean) {
-    const user = await this.usersService.findOneById(userId);
-    if (!user) throw new NotFoundException(NOT_FOUND);
-
-    if (setRole) {
-      if (!user.roles.includes(Roles.INSTITUTION_ADMIN))
-        return await this.usersService.update(userId, {
-          roles: [...user.roles, Roles.INSTITUTION_ADMIN],
-        });
-    } else {
-      if (
-        user.institutions.length <= 1 &&
-        user.roles.includes(Roles.INSTITUTION_ADMIN)
-      )
-        return await this.usersService.update(userId, {
-          roles: user.roles.filter((role) => role !== Roles.INSTITUTION_ADMIN),
-        });
-    }
   }
 }
