@@ -31,19 +31,19 @@ const DropdownMenu = <T,>({
       }}
     >
       <ul className="flex flex-col gap-[2px]">
-        {nullable && (
-          <MenuItem
-            value={null}
-            onClick={(value) => {
-              onChange && onChange(value);
-              clearFilter();
-            }}
-            isSelected={value === null}
-          >
-            {placeholder}
-          </MenuItem>
-        )}
         <AnimatePresence>
+          {nullable && (
+            <MenuItem
+              value={null}
+              onClick={(value) => {
+                onChange && onChange(value);
+                clearFilter();
+              }}
+              isSelected={value === null}
+            >
+              {placeholder}
+            </MenuItem>
+          )}
           {options?.map((option) => (
             <MenuItem
               onClick={(newValue) => {
