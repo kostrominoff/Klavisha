@@ -11,3 +11,6 @@ export * from "./shared-types/dto/update-institution.dto";
 export * from "./shared-types/group.type";
 export * from "./shared-types/dto/create-group.dto";
 export * from "./shared-types/dto/update-group.dto";
+export * from "./shared-types/student.type";
+export * from "./shared-types/dto/create-student.dto";
+export * from "./shared-types/dto/update-student.dto";

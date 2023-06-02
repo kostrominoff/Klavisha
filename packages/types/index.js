@@ -27,3 +27,6 @@ __exportStar(require("./shared-types/dto/update-institution.dto"), exports);
 __exportStar(require("./shared-types/group.type"), exports);
 __exportStar(require("./shared-types/dto/create-group.dto"), exports);
 __exportStar(require("./shared-types/dto/update-group.dto"), exports);
+__exportStar(require("./shared-types/student.type"), exports);
+__exportStar(require("./shared-types/dto/create-student.dto"), exports);
+__exportStar(require("./shared-types/dto/update-student.dto"), exports);

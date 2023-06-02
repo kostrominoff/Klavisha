@@ -57,7 +57,10 @@ export class InstitutionsController {
     @Query('name') name = '',
     @Query('city') city = '',
   ) {
-    return await this.institutionsService.findAll(limit, page, { name, city });
+    return await this.institutionsService.findAll(
+      { limit, page },
+      { name, city },
+    );
   }
 
   @ApiResponse({

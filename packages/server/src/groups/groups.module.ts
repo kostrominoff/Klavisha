@@ -9,5 +9,6 @@ import { InstitutionsModule } from 'src/institutions/institutions.module';
   imports: [TypeOrmModule.forFeature([GroupEntity]), InstitutionsModule],
   controllers: [GroupsController],
   providers: [GroupsService],
+  exports: [GroupsService],
 })
 export class GroupsModule {}

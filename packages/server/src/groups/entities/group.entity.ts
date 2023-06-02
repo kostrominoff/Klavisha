@@ -1,5 +1,6 @@
 import { Group } from '@klavisha/types';
 import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
+import { StudentEntity } from 'src/students/entities/student.entity';
 import {
   Column,
   CreateDateColumn,
@@ -22,4 +23,7 @@ export class GroupEntity implements Group {
 
   @ManyToOne(() => InstitutionEntity, (institution) => institution.groups)
   institution: InstitutionEntity;
+
+  @ManyToOne(() => StudentEntity, (student) => student.group)
+  students: StudentEntity[];
 }

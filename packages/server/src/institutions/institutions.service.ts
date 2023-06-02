@@ -5,6 +5,7 @@ import { Like, Repository } from 'typeorm';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { NO_ACCESS } from 'src/errors/access.errors';
+import { Pagination } from 'src/types/pagination';
 
 type SearchParams = {
   name?: string;
@@ -18,7 +19,10 @@ export class InstitutionsService {
     private readonly institutionRepository: Repository<InstitutionEntity>,
   ) {}
 
-  async findAll(limit = 10, page = 1, { name, city }: SearchParams) {
+  async findAll(
+    { limit = 10, page = 1 }: Pagination,
+    { name, city }: SearchParams,
+  ) {
     const [institutions, count] = await this.institutionRepository.findAndCount(
       {
         skip: (page - 1) * limit,

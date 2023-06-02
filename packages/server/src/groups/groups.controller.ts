@@ -83,7 +83,7 @@ export class GroupsController {
     @Query('page') page?: number,
     @Query('institutionId') institutionId?: number,
   ) {
-    return await this.groupsService.findAll(limit, page, institutionId);
+    return await this.groupsService.findAll({ page, limit }, institutionId);
   }
 
   @ApiResponse({

@@ -6,6 +6,7 @@ import { TypeormConfig } from './configs/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { InstitutionsModule } from './institutions/institutions.module';
 import { GroupsModule } from './groups/groups.module';
+import { StudentsModule } from './students/students.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { GroupsModule } from './groups/groups.module';
     AuthModule,
     InstitutionsModule,
     GroupsModule,
+    StudentsModule,
   ],
   controllers: [],
   providers: [],

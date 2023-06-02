@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Post,
   Res,
 } from '@nestjs/common';
@@ -15,11 +16,16 @@ import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { Response } from 'express';
 import { ApiCookieAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { GroupsService } from 'src/groups/groups.service';
+import { NOT_FOUND } from 'src/errors/group.errors';
 
 @ApiTags('Авторизация')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly groupsService: GroupsService,
+  ) {}
 
   @ApiResponse({
     status: HttpStatus.OK,
@@ -71,6 +77,9 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
     @Body() dto: RegisterUserDto,
   ) {
+    const group = await this.groupsService.findOneById(dto.groupId);
+    if (!group) throw new NotFoundException(NOT_FOUND);
+
     const tokens = await this.authService.register(dto);
     response.cookie('accessToken', tokens.accessToken, {
       httpOnly: true,

@@ -1,11 +1,13 @@
 import { Roles, User } from '@klavisha/types';
 import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
+import { StudentEntity } from 'src/students/entities/student.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -42,4 +44,7 @@ export class UserEntity implements User {
   })
   @JoinTable()
   institutions: InstitutionEntity[];
+
+  @OneToOne(() => StudentEntity, (student) => student.user)
+  student: StudentEntity;
 }

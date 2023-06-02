@@ -4,6 +4,7 @@ import { GroupEntity } from './entities/group.entity';
 import { Repository } from 'typeorm';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { Pagination } from 'src/types/pagination';
 
 @Injectable()
 export class GroupsService {
@@ -32,7 +33,7 @@ export class GroupsService {
     });
   }
 
-  async findAll(limit = 10, page = 1, institutionId?: number) {
+  async findAll({ page, limit }: Pagination, institutionId?: number) {
     const [groups, count] = await this.groupRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,

@@ -12,6 +12,7 @@ import { UsersService } from 'src/users/users.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { JwtPayload } from 'src/types/jwt-payload';
+import { StudentsService } from 'src/students/students.service';
 
 @Injectable()
 export class AuthService {
@@ -19,6 +20,7 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly studentsService: StudentsService,
   ) {}
 
   async login({ email, password }: LoginUserDto) {
@@ -39,6 +41,10 @@ export class AuthService {
     const createdUser = await this.usersService.create(dto);
 
     // TODO: Update group of user
+    await this.studentsService.create({
+      userId: createdUser.id,
+      groupId: dto.groupId,
+    });
 
     const tokens = await this.generateTokens(createdUser.id);
     return tokens;
