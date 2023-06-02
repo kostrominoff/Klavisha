@@ -22,7 +22,15 @@ import { NO_ACCESS } from 'src/errors/access.errors';
 import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
 
 @ApiTags('Пользователи')
-@ApiCookieAuth('accessToken')
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  description: 'Пользователь не авторизован',
+})
+@ApiResponse({
+  status: HttpStatus.FORBIDDEN,
+  description: 'Нет доступа',
+})
+@ApiCookieAuth()
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -34,14 +42,6 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.NOT_FOUND,
     description: 'Пользователь не найден',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Пользователь не авторизован',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Нет доступа',
   })
   @HttpCode(HttpStatus.OK)
   @Auth()
@@ -60,14 +60,6 @@ export class UsersController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Ошибка валидации тела запроса',
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Пользователь не авторизован',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Нет доступа',
-  })
   @HttpCode(HttpStatus.CREATED)
   @Auth([GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN])
   @Post()
@@ -79,14 +71,6 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Пользователь обновлён',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Пользователь не авторизован',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Нет доступа',
   })
   @Auth()
   @Patch(':id')
@@ -111,14 +95,6 @@ export class UsersController {
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Пользователь удалён',
-  })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Пользователь не авторизован',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Нет доступа',
   })
   @HttpCode(HttpStatus.OK)
   @Auth([GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN])

@@ -8,3 +8,6 @@ export * from "./shared-types/tokens.type";
 export * from "./shared-types/institution.type";
 export * from "./shared-types/dto/create-institution.dto";
 export * from "./shared-types/dto/update-institution.dto";
+export * from "./shared-types/group.type";
+export * from "./shared-types/dto/create-group.dto";
+export * from "./shared-types/dto/update-group.dto";

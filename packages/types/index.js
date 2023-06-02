@@ -24,3 +24,6 @@ __exportStar(require("./shared-types/tokens.type"), exports);
 __exportStar(require("./shared-types/institution.type"), exports);
 __exportStar(require("./shared-types/dto/create-institution.dto"), exports);
 __exportStar(require("./shared-types/dto/update-institution.dto"), exports);
+__exportStar(require("./shared-types/group.type"), exports);
+__exportStar(require("./shared-types/dto/create-group.dto"), exports);
+__exportStar(require("./shared-types/dto/update-group.dto"), exports);

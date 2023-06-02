@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeormConfig } from './configs/typeorm.config';
 import { AuthModule } from './auth/auth.module';
 import { InstitutionsModule } from './institutions/institutions.module';
+import { GroupsModule } from './groups/groups.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { InstitutionsModule } from './institutions/institutions.module';
     UsersModule,
     AuthModule,
     InstitutionsModule,
+    GroupsModule,
   ],
   controllers: [],
   providers: [],

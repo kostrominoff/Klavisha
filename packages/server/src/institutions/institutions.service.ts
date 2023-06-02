@@ -1,12 +1,7 @@
-import {
-  ForbiddenException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InstitutionEntity } from './entities/institution.entity';
 import { Like, Repository } from 'typeorm';
-import { NOT_FOUND as INSTITUTION_NOT_FOUND } from 'src/errors/institution.errors';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { NO_ACCESS } from 'src/errors/access.errors';
@@ -39,7 +34,7 @@ export class InstitutionsService {
         },
       },
     );
-    const pages = Math.floor(count / limit) + 1;
+    const pages = Math.ceil(count / limit);
     return {
       institutions,
       count,
@@ -70,7 +65,7 @@ export class InstitutionsService {
     institutionId: number,
     { owners, ...dto }: UpdateInstitutionDto,
   ) {
-    const institution = await this.institutionRepository.update(
+    return await this.institutionRepository.update(
       {
         id: institutionId,
       },
@@ -79,14 +74,9 @@ export class InstitutionsService {
         owners: owners.map((owner) => ({ id: owner })),
       },
     );
-
-    return institution;
   }
 
   async delete(id: number) {
-    const institution = await this.findOneById(id);
-    if (!institution) throw new NotFoundException(INSTITUTION_NOT_FOUND);
-
     return await this.institutionRepository.delete({
       id: id,
     });

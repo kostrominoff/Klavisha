@@ -1,10 +1,12 @@
 import { Institution } from '@klavisha/types';
+import { GroupEntity } from 'src/groups/entities/group.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -32,4 +34,7 @@ export class InstitutionEntity implements Institution {
 
   @ManyToMany(() => UserEntity, (user) => user.institutions)
   owners: UserEntity[];
+
+  @ManyToOne(() => GroupEntity, (group) => group.institution)
+  groups: GroupEntity[];
 }
