@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
-import { InputHTMLAttributes, ReactNode, Ref, forwardRef } from "react";
+import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
 import Typography from "../typography";
 
 type Props = {
@@ -16,6 +16,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
     {
       label,
       error,
+      className,
       iconLeft,
       iconRight,
       placeholder,
@@ -50,7 +51,10 @@ const Input = forwardRef<HTMLInputElement, Props>(
         >
           {iconLeft && <div className="pl-3">{iconLeft}</div>}
           <input
-            className="px-3 w-full text-base rounded-lg border-none outline-none pointer-events-auto py-[10px] placeholder:text-slate-400 text-slate-900"
+            className={clsx(
+              "px-3 w-full text-base rounded-lg border-none outline-none pointer-events-auto py-[10px] placeholder:text-slate-400 text-slate-900",
+              className
+            )}
             placeholder={placeholder}
             ref={ref}
             {...props}

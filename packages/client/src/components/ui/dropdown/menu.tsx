@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { DropdownProps } from ".";
 import MenuItem from "./item";
+import { isArray } from "./utils/is-array.util";
 
 type Props<OptionValue> = Omit<DropdownProps<OptionValue>, "onChange"> & {
   clearFilter: () => void;
@@ -18,7 +19,7 @@ const DropdownMenu = <T,>({
 }: Props<T>) => {
   return (
     <motion.div
-      className="overflow-hidden overflow-y-scroll absolute top-full p-1 w-full rounded-xl shadow-lg max-h-[234px] mt-[2px]"
+      className="overflow-hidden overflow-y-scroll absolute top-full p-1 w-full rounded-xl shadow-lg max-h-[234px] mt-[2px] scrollbar-hide"
       initial={{
         opacity: 0,
       }}
@@ -42,24 +43,26 @@ const DropdownMenu = <T,>({
             {placeholder}
           </MenuItem>
         )}
-        {options?.map((option) => (
-          <MenuItem
-            onClick={(newValue) => {
-              onChange && onChange(newValue);
-              clearFilter();
-            }}
-            isSelected={
-              multiple && Array.isArray(value)
-                ? value.includes(option.value)
-                : value === option.value
-            }
-            multiple={multiple}
-            value={option.value}
-            key={String(option.value)}
-          >
-            {option.label}
-          </MenuItem>
-        ))}
+        <AnimatePresence>
+          {options?.map((option) => (
+            <MenuItem
+              onClick={(newValue) => {
+                onChange && onChange(newValue);
+                clearFilter();
+              }}
+              isSelected={
+                multiple && isArray(value)
+                  ? value.includes(option.value)
+                  : value === option.value
+              }
+              multiple={multiple}
+              value={option.value}
+              key={String(option.value)}
+            >
+              {option.label}
+            </MenuItem>
+          ))}
+        </AnimatePresence>
       </ul>
     </motion.div>
   );

@@ -20,7 +20,21 @@ const MenuItem = <T,>({
   children,
 }: Props<T>) => {
   return (
-    <li className="block">
+    <motion.li
+      initial={{
+        height: 0,
+        opacity: 0,
+      }}
+      animate={{
+        height: "auto",
+        opacity: 1,
+      }}
+      exit={{
+        height: 0,
+        opacity: 0,
+      }}
+      className="block"
+    >
       <button
         type="button"
         className={clsx(
@@ -62,7 +76,7 @@ const MenuItem = <T,>({
           {children}
         </Typography>
       </button>
-    </li>
+    </motion.li>
   );
 };
 
