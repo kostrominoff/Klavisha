@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
-import { InputHTMLAttributes, ReactNode, forwardRef } from "react";
+import { InputHTMLAttributes, ReactNode, forwardRef, useId } from "react";
 import Typography from "../typography";
 
 type Props = {
@@ -25,6 +25,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
     },
     ref
   ) => {
+    const id = useId();
     return (
       <div
         className={clsx("inline-block", {
@@ -32,13 +33,15 @@ const Input = forwardRef<HTMLInputElement, Props>(
         })}
       >
         {label && (
-          <Typography
-            variant="text3"
-            tag="span"
-            className="block font-semibold text-slate-600"
-          >
-            {label}
-          </Typography>
+          <label htmlFor={id}>
+            <Typography
+              variant="text3"
+              tag="span"
+              className="block font-semibold text-slate-600"
+            >
+              {label}
+            </Typography>
+          </label>
         )}
         <div
           className={clsx(
@@ -51,6 +54,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
         >
           {iconLeft && <div className="pl-3">{iconLeft}</div>}
           <input
+            id={id}
             className={clsx(
               "px-3 w-full text-base rounded-lg border-none outline-none pointer-events-auto py-[10px] placeholder:text-slate-400 text-slate-900",
               className

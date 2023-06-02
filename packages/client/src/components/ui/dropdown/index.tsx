@@ -101,6 +101,30 @@ const Dropdown = <T,>({
     setFilter("");
   }, []);
 
+  const changeHandler = useCallback(
+    (value: T | null) => {
+      setLocalValue((prev) => {
+        if (multiple && isArray(prev) && value) {
+          // If multiple
+          if (prev.includes(value)) {
+            // Remove element
+            return prev.filter((element) => element !== value);
+          } else {
+            // Add element
+            return [...prev, value];
+          }
+        } else {
+          // If not multiple
+          return value;
+        }
+      });
+
+      // Close if not multiple
+      if (!multiple) close();
+    },
+    [multiple, close]
+  );
+
   const blurHandler = useCallback(
     (event: FocusEvent<HTMLInputElement>) => {
       if (!multiple) return close();
@@ -124,21 +148,25 @@ const Dropdown = <T,>({
   }, [localValue, onChange, nullable, multiple]);
 
   return (
-    <div className="inline-block relative" onBlur={blurHandler}>
+    <div className="inline-block relative" onFocus={open} onBlur={blurHandler}>
       <Input
         className={clsx({
           "placeholder:text-slate-900":
             multiple && isArray(localValue) ? localValue.length : localValue,
         })}
         value={filter}
-        onFocus={open}
         onChange={inputChangeHandler}
         placeholder={inputPlaceholder}
         error={error}
         label={label}
         ref={customRef}
         iconRight={
-          <button type="button" className="flex" onClick={toggleOpen}>
+          <button
+            tabIndex={-1}
+            type="button"
+            className="flex"
+            onClick={toggleOpen}
+          >
             <Icons.arrowDown />
           </button>
         }
@@ -147,23 +175,7 @@ const Dropdown = <T,>({
       <AnimatePresence>
         {isOpen && (
           <DropdownMenu
-            onChange={(newValue) =>
-              setLocalValue((prev) => {
-                if (multiple && isArray(prev) && newValue) {
-                  // If multiple
-                  if (prev.includes(newValue)) {
-                    // Remove element
-                    return prev.filter((element) => element !== newValue);
-                  } else {
-                    // Add element
-                    return [...prev, newValue];
-                  }
-                } else {
-                  // If not multiple
-                  return newValue;
-                }
-              })
-            }
+            onChange={changeHandler}
             value={localValue}
             multiple={multiple}
             options={filteredOptions}

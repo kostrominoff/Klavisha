@@ -38,7 +38,7 @@ const MenuItem = <T,>({
       <button
         type="button"
         className={clsx(
-          "block px-4 w-full text-left rounded-lg transition cursor-pointer py-[9px] hover:bg-slate-100",
+          "block px-4 w-full text-left rounded-lg transition cursor-pointer py-[9px] hover:bg-slate-100 focus:bg-slate-100 focus:border-none focus:outline-none",
           {
             "bg-indigo-100": isSelected && !multiple,
           }
