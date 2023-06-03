@@ -1,10 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StudentEntity } from './entities/student.entity';
 import { Repository } from 'typeorm';
 import { Pagination } from 'src/types/pagination';
+import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
+import { NO_ACCESS } from 'src/errors/access.errors';
 
 @Injectable()
 export class StudentsService {
@@ -26,7 +28,7 @@ export class StudentsService {
   }
 
   async findAll(
-    { limit, page }: Pagination,
+    { limit = 30, page = 1 }: Pagination,
     institutionId?: number,
     groupId?: number,
   ) {
@@ -76,5 +78,15 @@ export class StudentsService {
 
   async delete(id: number) {
     return await this.studentRepository.delete({ id });
+  }
+
+  async checkAccess(groupId: number, institutions: InstitutionEntity[]) {
+    if (
+      !institutions.some((institutuion) =>
+        institutuion.groups.some((group) => group.id === groupId),
+      )
+    ) {
+      throw new ForbiddenException(NO_ACCESS);
+    }
   }
 }

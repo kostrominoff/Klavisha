@@ -40,7 +40,6 @@ export class AuthService {
 
     const createdUser = await this.usersService.create(dto);
 
-    // TODO: Update group of user
     await this.studentsService.create({
       userId: createdUser.id,
       groupId: dto.groupId,

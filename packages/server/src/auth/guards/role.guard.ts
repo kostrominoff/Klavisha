@@ -12,7 +12,8 @@ export class RoleGuard implements CanActivate {
       switch (role) {
         case GuardRoles.ADMIN:
           return user.role === Roles.ADMIN;
-        // case GuardRoles.STUDENT: return !!user.student
+        case GuardRoles.STUDENT:
+          return !!user.student;
         // case GuardRoles.TEACHER: return !!user.teacher
         case GuardRoles.INSTITUTION_ADMIN:
           return !!user.institutions?.length;
