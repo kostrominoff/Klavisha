@@ -5,6 +5,9 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
+  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -22,9 +25,11 @@ export class StudentEntity implements Student {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(() => GroupEntity, (group) => group.students)
+  @ManyToOne(() => GroupEntity, (group) => group.students)
+  @JoinTable()
   group: GroupEntity;
 
   @OneToOne(() => UserEntity, (user) => user.student)
+  @JoinColumn()
   user: UserEntity;
 }

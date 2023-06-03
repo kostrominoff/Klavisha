@@ -16,10 +16,10 @@ import { InstitutionsService } from 'src/institutions/institutions.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { Auth } from 'src/auth/guards/auth.guard';
 import { GuardRoles, Roles } from '@klavisha/types';
-import { NOT_FOUND } from 'src/errors/institution.errors';
 import { ApiCookieAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from 'src/users/decorators/user.decorator';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { NOT_FOUND } from 'src/errors/group.errors';
 
 @ApiTags('Группы')
 @ApiResponse({
@@ -49,14 +49,14 @@ export class GroupsController {
     @CurrentUser('role') userRole: Roles,
     @Body() dto: CreateGroupDto,
   ) {
-    const institution = await this.institutionsService.findOneById(
-      dto.institutionId,
-    );
-    if (!institution) throw new NotFoundException(NOT_FOUND);
+    if (userRole !== Roles.ADMIN) {
+      const institution = await this.institutionsService.findOneById(
+        dto.institutionId,
+      );
+      if (!institution) throw new NotFoundException(NOT_FOUND);
 
-    if (userRole !== Roles.ADMIN)
       await this.institutionsService.checkIsOwner(institution.id, userId);
-
+    }
     return await this.groupsService.create(dto);
   }
 
@@ -99,13 +99,11 @@ export class GroupsController {
     @CurrentUser('id') userId: number,
     @CurrentUser('role') userRole: Roles,
   ) {
-    const institution = await this.institutionsService.findOneById(
-      dto.institutionId,
-    );
-    if (!institution) throw new NotFoundException(NOT_FOUND);
-
-    if (userRole !== Roles.ADMIN)
-      await this.institutionsService.checkIsOwner(institution.id, userId);
+    if (userRole !== Roles.ADMIN) {
+      const group = await this.groupsService.findOneById(id);
+      if (!group) throw new NotFoundException(NOT_FOUND);
+      await this.institutionsService.checkIsOwner(group.institution.id, userId);
+    }
 
     return await this.groupsService.update(id, dto);
   }
@@ -122,11 +120,11 @@ export class GroupsController {
     @CurrentUser('id') userId: number,
     @CurrentUser('role') userRole: Roles,
   ) {
-    const group = await this.groupsService.findOneById(id);
-    if (!group) throw new NotFoundException();
-
-    if (userRole !== Roles.ADMIN)
+    if (userRole !== Roles.ADMIN) {
+      const group = await this.groupsService.findOneById(id);
+      if (!group) throw new NotFoundException(NOT_FOUND);
       await this.institutionsService.checkIsOwner(group.institution.id, userId);
+    }
 
     return await this.groupsService.delete(id);
   }

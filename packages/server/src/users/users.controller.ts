@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -6,6 +7,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -20,6 +22,9 @@ import { GuardRoles, Roles } from '@klavisha/types';
 import { CurrentUser } from './decorators/user.decorator';
 import { NO_ACCESS } from 'src/errors/access.errors';
 import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
+import { GroupsService } from 'src/groups/groups.service';
+import { NOT_FOUND } from 'src/errors/group.errors';
+import { InstitutionsService } from 'src/institutions/institutions.service';
 
 @ApiTags('Пользователи')
 @ApiResponse({
@@ -33,7 +38,11 @@ import { InstitutionEntity } from 'src/institutions/entities/institution.entity'
 @ApiCookieAuth()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly groupsService: GroupsService,
+    private readonly institutionsService: InstitutionsService,
+  ) {}
 
   @ApiResponse({
     status: HttpStatus.OK,
@@ -63,7 +72,35 @@ export class UsersController {
   @HttpCode(HttpStatus.CREATED)
   @Auth([GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN])
   @Post()
-  async create(@Body() dto: CreateUserDto) {
+  async create(
+    @CurrentUser('role') role: Roles,
+    @CurrentUser('institutions') institutions: InstitutionEntity[],
+    @Body() dto: CreateUserDto,
+  ) {
+    if (dto.groupId) {
+      const group = await this.groupsService.findOneById(dto.groupId);
+      if (!group) throw new NotFoundException(NOT_FOUND);
+
+      if (
+        role !== Roles.ADMIN &&
+        institutions.some(
+          (institution) => institution.id !== group.institution.id,
+        )
+      )
+        throw new ForbiddenException(NO_ACCESS);
+    }
+
+    if (dto.institutionsId) {
+      const { length } = await this.institutionsService.findAllById(
+        dto.institutionsId,
+      );
+      if (length !== dto.institutionsId.length)
+        throw new BadRequestException('Проверьте учебные заведения');
+    }
+
+    if (dto.role === Roles.ADMIN && role !== Roles.ADMIN)
+      throw new ForbiddenException(NO_ACCESS);
+
     return await this.usersService.create(dto);
   }
 

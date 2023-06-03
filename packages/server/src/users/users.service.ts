@@ -5,20 +5,41 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { StudentsService } from 'src/students/students.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly studentsService: StudentsService,
   ) {}
 
-  async create({ password, ...dto }: CreateUserDto) {
+  async create({
+    password,
+    groupId,
+    subgroup,
+    institutionsId,
+    ...dto
+  }: CreateUserDto) {
+    // TODO: generate password and send to the email
+    if (!password) password = 'password';
     const hashedPassword = await hash(password, 10);
-    return await this.userRepository.save({
+
+    const user = await this.userRepository.save({
       ...dto,
+      institutions: institutionsId?.map((id) => ({ id })),
       password: hashedPassword,
     });
+
+    if (groupId)
+      await this.studentsService.create({
+        groupId,
+        subgroup,
+        userId: user.id,
+      });
+
+    return user;
   }
 
   async findOneById(id: number) {
@@ -28,6 +49,7 @@ export class UsersService {
       },
       relations: {
         institutions: true,
+        student: true,
       },
     });
   }

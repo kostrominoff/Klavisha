@@ -8,6 +8,13 @@ import { Pagination } from 'src/types/pagination';
 import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
 import { NO_ACCESS } from 'src/errors/access.errors';
 
+type SearchParams = {
+  institutionId?: number;
+  groupId?: number;
+  institutionAdminId?: number;
+  teacherId?: number;
+};
+
 @Injectable()
 export class StudentsService {
   constructor(
@@ -27,10 +34,10 @@ export class StudentsService {
     });
   }
 
+  // TODO: Teacher
   async findAll(
     { limit = 30, page = 1 }: Pagination,
-    institutionId?: number,
-    groupId?: number,
+    { groupId, institutionId, teacherId, institutionAdminId }: SearchParams,
   ) {
     const [students, count] = await this.studentRepository.findAndCount({
       where: {
@@ -38,6 +45,9 @@ export class StudentsService {
           id: groupId,
           institution: {
             id: institutionId,
+            owners: {
+              id: institutionAdminId,
+            },
           },
         },
       },

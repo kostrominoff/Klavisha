@@ -1,6 +1,6 @@
 import { ICreateUserDto, Roles } from '@klavisha/types';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsString } from 'class-validator';
 
 export class CreateUserDto implements ICreateUserDto {
   @ApiProperty({
@@ -13,8 +13,7 @@ export class CreateUserDto implements ICreateUserDto {
     description: 'Пароль',
     minLength: 8,
   })
-  @MinLength(8, { message: 'Пароль должен иметь не менее 8 символов!' })
-  password: string;
+  password?: string;
   @ApiProperty({
     description: 'Роль пользователя',
     enum: Roles,
@@ -36,4 +35,21 @@ export class CreateUserDto implements ICreateUserDto {
     nullable: true,
   })
   fathername?: string;
+
+  @ApiProperty({
+    description:
+      'Идентификаторы учебных заведений, в которых пользователь будет админом',
+    nullable: true,
+  })
+  institutionsId?: number[];
+  @ApiProperty({
+    description: 'Подгруппа пользователя, если студент',
+    nullable: true,
+  })
+  subgroup?: string;
+  @ApiProperty({
+    description: 'Индентификатор группы, если студент',
+    nullable: true,
+  })
+  groupId?: number;
 }

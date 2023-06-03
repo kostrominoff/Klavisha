@@ -8,7 +8,6 @@ import {
   ParseIntPipe,
   NotFoundException,
   Query,
-  ForbiddenException,
   HttpStatus,
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
@@ -18,7 +17,6 @@ import { GuardRoles, Roles } from '@klavisha/types';
 import { NOT_FOUND } from 'src/errors/user.errors';
 import { CurrentUser } from 'src/users/decorators/user.decorator';
 import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
-import { NO_ACCESS } from 'src/errors/access.errors';
 import { InstitutionsService } from 'src/institutions/institutions.service';
 import { ApiCookieAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -59,25 +57,15 @@ export class StudentsController {
     @Query('limit') limit?: number,
     @Query('page') page?: number,
   ) {
-    if (role !== Roles.ADMIN) {
-      if (!institutionId) throw new ForbiddenException(NO_ACCESS);
-      // Institution admin
-      if (institutions.length) {
-        await this.institutionsService.checkIsOwner(institutionId, userId);
-      }
-
-      // TODO: Teacher
-
-      // Teacher
-      // if (teacher) {
-      //   const groupId = student.group.id;
-      //   await this.studentsService.checkAccess(groupId, institutions);
-      // }
-    }
+    // TODO: Teacher
     return await this.studentsService.findAll(
       { page, limit },
-      institutionId,
-      groupId,
+      {
+        groupId,
+        institutionId,
+        institutionAdminId:
+          role !== Roles.ADMIN && institutions.length && userId,
+      },
     );
   }
 
@@ -112,7 +100,7 @@ export class StudentsController {
       //   await this.studentsService.checkAccess(groupId, institutions);
       // }
     }
-    return await this.studentsService.findOne(+id);
+    return await this.studentsService.findOne(id);
   }
 
   @ApiResponse({

@@ -29,11 +29,12 @@ export class GroupsService {
       },
       relations: {
         institution: true,
+        students: true,
       },
     });
   }
 
-  async findAll({ page, limit }: Pagination, institutionId?: number) {
+  async findAll({ page = 1, limit = 30 }: Pagination, institutionId?: number) {
     const [groups, count] = await this.groupRepository.findAndCount({
       skip: (page - 1) * limit,
       take: limit,

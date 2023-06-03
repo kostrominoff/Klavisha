@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InstitutionEntity } from './entities/institution.entity';
-import { Like, Repository } from 'typeorm';
+import { In, Like, Repository } from 'typeorm';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { NO_ACCESS } from 'src/errors/access.errors';
@@ -18,6 +18,14 @@ export class InstitutionsService {
     @InjectRepository(InstitutionEntity)
     private readonly institutionRepository: Repository<InstitutionEntity>,
   ) {}
+
+  async findAllById(institutionsId: number[]) {
+    return await this.institutionRepository.find({
+      where: {
+        id: In(institutionsId),
+      },
+    });
+  }
 
   async findAll(
     { limit = 10, page = 1 }: Pagination,

@@ -6,6 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -24,6 +25,6 @@ export class GroupEntity implements Group {
   @ManyToOne(() => InstitutionEntity, (institution) => institution.groups)
   institution: InstitutionEntity;
 
-  @ManyToOne(() => StudentEntity, (student) => student.group)
+  @OneToMany(() => StudentEntity, (student) => student.group)
   students: StudentEntity[];
 }
