@@ -5,6 +5,7 @@ import ButtonLoading from "./button-loading.svg";
 import ButtonLoadingPrimary from "./button-loading-primary.svg";
 import ButtonLoadingOnlyIcon from "./button-loading-only-icon.svg";
 import ButtonLoadingPrimaryOnlyIcon from "./button-loading-primary-only-icon.svg";
+import Checkbox from "./checkbox.svg";
 
 type ButtonLoadingProps = {
   primary?: boolean;
@@ -25,6 +26,7 @@ const Icons = {
       return <ButtonLoading className="animate-spin" />;
     }
   },
+  checkbox: () => <Checkbox />,
 };
 
 export default Icons;

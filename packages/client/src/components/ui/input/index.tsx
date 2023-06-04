@@ -63,7 +63,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
             ref={ref}
             {...props}
           />
-          {iconRight && <div className="relative z-50 mr-3">{iconRight}</div>}
+          {iconRight && <div className="relative mr-3">{iconRight}</div>}
         </div>
         <AnimatePresence>
           {error && (

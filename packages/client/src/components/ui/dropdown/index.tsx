@@ -26,6 +26,7 @@ type DropdownBaseType<OptionValue> = {
   error?: string;
   label?: string;
   limit?: number;
+  fullWidth?: boolean;
 };
 
 type NotNullableDropdown<OptionValue> = {
@@ -70,14 +71,14 @@ const Dropdown = <T,>({
   multiple,
   error,
   limit,
+  fullWidth,
   customRef,
   ...props
 }: DropdownProps<T> & { customRef?: Ref<HTMLInputElement> }) => {
   const [localValue, setLocalValue] = useState<T[] | T | null>(
     value || multiple ? [] : null
   );
-  const [isOpen, { setTrue: open, toggle: toggleOpen, setFalse: close }] =
-    useBoolean();
+  const [isOpen, { setTrue: open, setFalse: close }] = useBoolean();
   const [filter, setFilter] = useState("");
 
   const filteredOptions = useFilter(
@@ -148,43 +149,47 @@ const Dropdown = <T,>({
   }, [localValue, onChange, nullable, multiple]);
 
   return (
-    <div className="inline-block relative" onFocus={open} onBlur={blurHandler}>
-      <Input
-        className={clsx({
-          "placeholder:text-slate-900":
-            multiple && isArray(localValue) ? localValue.length : localValue,
+    <div className="inline-block">
+      <div
+        className={clsx("inline-block relative", {
+          "w-full": fullWidth,
         })}
-        value={filter}
-        onChange={inputChangeHandler}
-        placeholder={inputPlaceholder}
-        error={error}
-        label={label}
-        ref={customRef}
-        iconRight={
-          <button
-            tabIndex={-1}
-            type="button"
-            className="flex"
-            onClick={toggleOpen}
-          >
-            <Icons.arrowDown />
-          </button>
-        }
-        {...props}
-      />
-      <AnimatePresence>
-        {isOpen && (
-          <DropdownMenu
-            onChange={changeHandler}
-            value={localValue}
-            multiple={multiple}
-            options={filteredOptions}
-            clearFilter={clearFilter}
-            placeholder={placeholder}
-            nullable={nullable}
-          />
-        )}
-      </AnimatePresence>
+        onFocus={open}
+        onBlur={blurHandler}
+      >
+        <Input
+          className={clsx({
+            "placeholder:text-slate-900":
+              multiple && isArray(localValue) ? localValue.length : localValue,
+          })}
+          fullWidth={fullWidth}
+          value={filter}
+          onChange={inputChangeHandler}
+          placeholder={inputPlaceholder}
+          error={error}
+          label={label}
+          ref={customRef}
+          iconRight={
+            <button tabIndex={-1} type="button" className="flex" onClick={open}>
+              <Icons.arrowDown />
+            </button>
+          }
+          {...props}
+        />
+        <AnimatePresence>
+          {isOpen && (
+            <DropdownMenu
+              onChange={changeHandler}
+              value={localValue}
+              multiple={multiple}
+              options={filteredOptions}
+              clearFilter={clearFilter}
+              placeholder={placeholder}
+              nullable={nullable}
+            />
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };

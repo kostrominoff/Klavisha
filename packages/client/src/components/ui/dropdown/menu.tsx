@@ -18,8 +18,7 @@ const DropdownMenu = <T,>({
   placeholder,
 }: Props<T>) => {
   return (
-    <motion.div
-      className="overflow-hidden overflow-y-scroll absolute top-full p-1 w-full rounded-xl shadow-lg max-h-[234px] mt-[2px] scrollbar-hide"
+    <motion.ul
       initial={{
         opacity: 0,
       }}
@@ -29,42 +28,41 @@ const DropdownMenu = <T,>({
       exit={{
         opacity: 0,
       }}
+      className="flex overflow-hidden overflow-y-scroll absolute right-0 left-0 top-full z-10 flex-col p-1 bg-white rounded-xl shadow-lg gap-[2px] max-h-[234px] mt-[2px] scrollbar-hide"
     >
-      <ul className="flex flex-col gap-[2px]">
-        <AnimatePresence>
-          {nullable && (
-            <MenuItem
-              value={null}
-              onClick={(value) => {
-                onChange && onChange(value);
-                clearFilter();
-              }}
-              isSelected={value === null}
-            >
-              {placeholder}
-            </MenuItem>
-          )}
-          {options?.map((option) => (
-            <MenuItem
-              onClick={(newValue) => {
-                onChange && onChange(newValue);
-                clearFilter();
-              }}
-              isSelected={
-                multiple && isArray(value)
-                  ? value.includes(option.value)
-                  : value === option.value
-              }
-              multiple={multiple}
-              value={option.value}
-              key={String(option.value)}
-            >
-              {option.label}
-            </MenuItem>
-          ))}
-        </AnimatePresence>
-      </ul>
-    </motion.div>
+      <AnimatePresence>
+        {nullable && (
+          <MenuItem
+            value={null}
+            onClick={(value) => {
+              onChange && onChange(value);
+              clearFilter();
+            }}
+            isSelected={value === null}
+          >
+            {placeholder}
+          </MenuItem>
+        )}
+        {options?.map((option) => (
+          <MenuItem
+            onClick={(newValue) => {
+              onChange && onChange(newValue);
+              clearFilter();
+            }}
+            isSelected={
+              multiple && isArray(value)
+                ? value.includes(option.value)
+                : value === option.value
+            }
+            multiple={multiple}
+            value={option.value}
+            key={String(option.value)}
+          >
+            {option.label}
+          </MenuItem>
+        ))}
+      </AnimatePresence>
+    </motion.ul>
   );
 };
 
