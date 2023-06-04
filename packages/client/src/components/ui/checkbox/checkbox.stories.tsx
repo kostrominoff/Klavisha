@@ -15,3 +15,10 @@ export const Default: Story = {
     label: "Hello, world",
   },
 };
+
+export const Disabled: Story = {
+  args: {
+    label: "Hello, world",
+    disabled: true,
+  },
+};
