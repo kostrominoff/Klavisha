@@ -5,6 +5,8 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
@@ -32,9 +34,15 @@ export class InstitutionEntity implements Institution {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToMany(() => UserEntity, (user) => user.institutions)
+  @ManyToMany(() => UserEntity, (user) => user.institutions, {
+    cascade: true,
+  })
+  @JoinTable()
   owners: UserEntity[];
 
-  @ManyToOne(() => GroupEntity, (group) => group.institution)
+  @ManyToOne(() => GroupEntity, (group) => group.institution, {
+    cascade: true,
+  })
+  @JoinColumn()
   groups: GroupEntity[];
 }

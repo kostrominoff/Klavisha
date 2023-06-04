@@ -1,18 +1,17 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { StudentsService } from 'src/students/students.service';
+import { USER_ALREADY_EXISTS } from 'src/errors';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-    private readonly studentsService: StudentsService,
   ) {}
 
   async create({
@@ -23,21 +22,24 @@ export class UsersService {
     ...dto
   }: CreateUserDto) {
     // TODO: generate password and send to the email
+
+    const oldUser = await this.findOneByEmail(dto.email);
+    if (oldUser) throw new BadRequestException(USER_ALREADY_EXISTS);
+
     if (!password) password = 'password';
     const hashedPassword = await hash(password, 10);
 
     const user = await this.userRepository.save({
       ...dto,
+      student: {
+        group: groupId && {
+          id: groupId,
+        },
+        subgroup: subgroup,
+      },
       institutions: institutionsId?.map((id) => ({ id })),
       password: hashedPassword,
     });
-
-    if (groupId)
-      await this.studentsService.create({
-        groupId,
-        subgroup,
-        userId: user.id,
-      });
 
     return user;
   }
@@ -49,7 +51,9 @@ export class UsersService {
       },
       relations: {
         institutions: true,
-        student: true,
+        student: {
+          group: true,
+        },
       },
     });
   }

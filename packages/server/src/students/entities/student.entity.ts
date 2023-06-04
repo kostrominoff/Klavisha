@@ -8,7 +8,6 @@ import {
   JoinColumn,
   JoinTable,
   ManyToOne,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -25,11 +24,12 @@ export class StudentEntity implements Student {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(() => GroupEntity, (group) => group.students)
+  @ManyToOne(() => GroupEntity, (group) => group.students, {
+    cascade: true,
+  })
   @JoinTable()
   group: GroupEntity;
 
   @OneToOne(() => UserEntity, (user) => user.student)
-  @JoinColumn()
   user: UserEntity;
 }

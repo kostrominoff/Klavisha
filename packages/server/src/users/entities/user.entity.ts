@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToOne,
@@ -39,12 +40,13 @@ export class UserEntity implements User {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToMany(() => InstitutionEntity, (institution) => institution.owners, {
-    eager: true,
-  })
+  @ManyToMany(() => InstitutionEntity, (institution) => institution.owners)
   @JoinTable()
   institutions: InstitutionEntity[];
 
-  @OneToOne(() => StudentEntity, (student) => student.user)
+  @OneToOne(() => StudentEntity, (student) => student.user, {
+    cascade: true,
+  })
+  @JoinColumn()
   student: StudentEntity;
 }

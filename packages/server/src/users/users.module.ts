@@ -5,14 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { GroupsModule } from 'src/groups/groups.module';
 import { InstitutionsModule } from 'src/institutions/institutions.module';
-import { StudentsModule } from 'src/students/students.module';
 
 @Global()
 @Module({
   imports: [
     GroupsModule,
     InstitutionsModule,
-    StudentsModule,
     TypeOrmModule.forFeature([UserEntity]),
   ],
   controllers: [UsersController],

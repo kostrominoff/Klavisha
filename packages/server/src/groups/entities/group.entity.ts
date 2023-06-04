@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -23,8 +24,10 @@ export class GroupEntity implements Group {
   updatedAt: Date;
 
   @ManyToOne(() => InstitutionEntity, (institution) => institution.groups)
+  @JoinColumn()
   institution: InstitutionEntity;
 
   @OneToMany(() => StudentEntity, (student) => student.group)
+  @JoinColumn()
   students: StudentEntity[];
 }
