@@ -1,5 +1,4 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
-import { CreateStudentDto } from './dto/create-student.dto';
 import { UpdateStudentDto } from './dto/update-student.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StudentEntity } from './entities/student.entity';
@@ -22,19 +21,6 @@ export class StudentsService {
     private readonly studentRepository: Repository<StudentEntity>,
   ) {}
 
-  async create({ userId, groupId, ...dto }: CreateStudentDto) {
-    return await this.studentRepository.save({
-      ...dto,
-      group: {
-        id: groupId,
-      },
-      user: {
-        id: userId,
-      },
-    });
-  }
-
-  // TODO: Teacher
   async findAll(
     { limit = 30, page = 1 }: Pagination,
     { groupId, institutionId, teacherId, institutionAdminId }: SearchParams,
@@ -47,6 +33,9 @@ export class StudentsService {
             id: institutionId,
             owners: {
               id: institutionAdminId,
+            },
+            teachers: {
+              id: teacherId,
             },
           },
         },

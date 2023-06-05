@@ -6,7 +6,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtConfig } from 'src/configs/jwt.config';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { StudentsModule } from 'src/students/students.module';
 import { GroupsModule } from 'src/groups/groups.module';
 
 @Global()
@@ -14,7 +13,6 @@ import { GroupsModule } from 'src/groups/groups.module';
   imports: [
     UsersModule,
     ConfigModule,
-    StudentsModule,
     GroupsModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],

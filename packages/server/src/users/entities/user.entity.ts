@@ -1,6 +1,7 @@
 import { Roles, User } from '@klavisha/types';
 import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
 import { StudentEntity } from 'src/students/entities/student.entity';
+import { TeacherEntity } from 'src/teachers/entities/teacher.entity';
 import {
   Column,
   CreateDateColumn,
@@ -46,7 +47,17 @@ export class UserEntity implements User {
 
   @OneToOne(() => StudentEntity, (student) => student.user, {
     cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinColumn()
   student: StudentEntity;
+
+  @OneToOne(() => TeacherEntity, (teacher) => teacher.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn()
+  teacher: TeacherEntity;
 }

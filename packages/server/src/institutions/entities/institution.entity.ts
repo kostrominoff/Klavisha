@@ -1,5 +1,6 @@
 import { Institution } from '@klavisha/types';
 import { GroupEntity } from 'src/groups/entities/group.entity';
+import { TeacherEntity } from 'src/teachers/entities/teacher.entity';
 import { UserEntity } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -42,7 +43,17 @@ export class InstitutionEntity implements Institution {
 
   @ManyToOne(() => GroupEntity, (group) => group.institution, {
     cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
   })
   @JoinColumn()
   groups: GroupEntity[];
+
+  @ManyToOne(() => TeacherEntity, (teacher) => teacher.institution, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn()
+  teachers: TeacherEntity[];
 }

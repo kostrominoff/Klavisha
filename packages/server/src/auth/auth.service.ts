@@ -12,7 +12,6 @@ import { UsersService } from 'src/users/users.service';
 import { LoginUserDto } from './dto/login-user.dto';
 import { RegisterUserDto } from './dto/register-user.dto';
 import { JwtPayload } from 'src/types/jwt-payload';
-import { StudentsService } from 'src/students/students.service';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +19,6 @@ export class AuthService {
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
-    private readonly studentsService: StudentsService,
   ) {}
 
   async login({ email, password }: LoginUserDto) {
@@ -34,15 +32,13 @@ export class AuthService {
     return tokens;
   }
 
-  async register(dto: RegisterUserDto) {
+  async register({ groupId, ...dto }: RegisterUserDto) {
     const user = await this.usersService.findOneByEmail(dto.email);
     if (user) throw new BadRequestException(USER_ALREADY_EXISTS);
 
-    const createdUser = await this.usersService.create(dto);
-
-    await this.studentsService.create({
-      userId: createdUser.id,
-      groupId: dto.groupId,
+    const createdUser = await this.usersService.create({
+      ...dto,
+      groupId,
     });
 
     const tokens = await this.generateTokens(createdUser.id);
