@@ -29,15 +29,21 @@ export class StudentsService {
       where: {
         group: {
           id: groupId,
-          institution: {
-            id: institutionId,
-            owners: {
-              id: institutionAdminId,
+          institution: [
+            {
+              id: institutionId,
             },
-            teachers: {
-              id: teacherId,
+            {
+              owners: {
+                id: institutionAdminId,
+              },
             },
-          },
+            {
+              teachers: {
+                id: teacherId,
+              },
+            },
+          ],
         },
       },
       relations: {

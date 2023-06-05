@@ -19,6 +19,7 @@ import { CurrentUser } from 'src/users/decorators/user.decorator';
 import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
 import { InstitutionsService } from 'src/institutions/institutions.service';
 import { ApiCookieAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { TeacherEntity } from 'src/teachers/entities/teacher.entity';
 
 @ApiCookieAuth()
 @ApiTags('Студенты')
@@ -51,13 +52,12 @@ export class StudentsController {
     @CurrentUser('role') role: Roles,
     @CurrentUser('institutions') institutions: InstitutionEntity[],
     @CurrentUser('id') userId: number,
-    // @CurrentUser('teacher') teacher: TeacherEntity
+    @CurrentUser('teacher') teacher: TeacherEntity,
     @Query('institutionId') institutionId?: number,
     @Query('groupId') groupId?: number,
     @Query('limit') limit?: number,
     @Query('page') page?: number,
   ) {
-    // TODO: Teacher
     return await this.studentsService.findAll(
       { page, limit },
       {
@@ -65,6 +65,7 @@ export class StudentsController {
         institutionId,
         institutionAdminId:
           role !== Roles.ADMIN && institutions.length && userId,
+        teacherId: teacher.id,
       },
     );
   }
@@ -79,7 +80,7 @@ export class StudentsController {
     @CurrentUser('role') role: Roles,
     @CurrentUser('id') userId: number,
     @CurrentUser('institutions') institutions: InstitutionEntity[],
-    // @CurrentUser('teacher') teacher: TeacherEntity
+    @CurrentUser('teacher') teacher: TeacherEntity,
     @Param('id', ParseIntPipe) id: number,
   ) {
     if (role !== Roles.ADMIN) {
@@ -92,13 +93,11 @@ export class StudentsController {
         await this.institutionsService.checkIsOwner(institutionId, userId);
       }
 
-      // TODO: Teacher
-
       // Teacher
-      // if (teacher) {
-      //   const groupId = student.group.id;
-      //   await this.studentsService.checkAccess(groupId, institutions);
-      // }
+      if (teacher) {
+        const groupId = student.group.id;
+        await this.studentsService.checkAccess(groupId, institutions);
+      }
     }
     return await this.studentsService.findOne(id);
   }
