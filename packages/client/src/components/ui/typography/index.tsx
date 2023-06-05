@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { ReactNode } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 
 type TypographyTag = "h1" | "h2" | "h3" | "h4" | "h5" | "p" | "span";
 type TypographyVariant =
@@ -18,13 +18,14 @@ type Props = {
   variant?: TypographyVariant;
   children?: ReactNode;
   className?: string;
-};
+} & HTMLAttributes<HTMLElement>;
 
 const Typography = ({
   children,
   variant = "text1",
   tag: Tag = "p",
   className,
+  ...props
 }: Props) => {
   return (
     <Tag
@@ -39,6 +40,7 @@ const Typography = ({
         "text-sm": variant === "text3",
         "text-xs": variant === "text4",
       })}
+      {...props}
     >
       {children}
     </Tag>

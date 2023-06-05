@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { AnimatePresence, MotionProps, motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { ButtonHTMLAttributes } from "react";
 import Icons from "../icons/index";
 
@@ -12,8 +12,7 @@ type Props = {
   loading?: boolean;
   disabled?: boolean;
   onlyIcon?: boolean;
-} & ButtonHTMLAttributes<HTMLButtonElement> &
-  MotionProps;
+} & ButtonHTMLAttributes<HTMLButtonElement>;
 
 type ButtonLoaderProps = {
   primary?: boolean;

@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { DropdownProps } from ".";
 import MenuItem from "./item";
+import { isArray } from "./utils/is-array.util";
 
 type Props<OptionValue> = Omit<DropdownProps<OptionValue>, "onChange"> & {
   clearFilter: () => void;
@@ -17,8 +18,7 @@ const DropdownMenu = <T,>({
   placeholder,
 }: Props<T>) => {
   return (
-    <motion.div
-      className="overflow-hidden overflow-y-scroll absolute top-full p-1 w-full rounded-xl shadow-lg max-h-[234px] mt-[2px]"
+    <motion.ul
       initial={{
         opacity: 0,
       }}
@@ -28,8 +28,9 @@ const DropdownMenu = <T,>({
       exit={{
         opacity: 0,
       }}
+      className="flex overflow-hidden overflow-y-scroll absolute right-0 left-0 top-full z-10 flex-col p-1 bg-white rounded-xl shadow-lg gap-[2px] max-h-[234px] mt-[2px] scrollbar-hide"
     >
-      <ul className="flex flex-col gap-[2px]">
+      <AnimatePresence>
         {nullable && (
           <MenuItem
             value={null}
@@ -49,7 +50,7 @@ const DropdownMenu = <T,>({
               clearFilter();
             }}
             isSelected={
-              multiple && Array.isArray(value)
+              multiple && isArray(value)
                 ? value.includes(option.value)
                 : value === option.value
             }
@@ -60,8 +61,8 @@ const DropdownMenu = <T,>({
             {option.label}
           </MenuItem>
         ))}
-      </ul>
-    </motion.div>
+      </AnimatePresence>
+    </motion.ul>
   );
 };
 

@@ -39,6 +39,20 @@ export const Secondary: Story = {
   },
 };
 
+export const Tertiary: Story = {
+  args: {
+    ...Primary.args,
+    variant: "tertiary",
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    ...Primary.args,
+    loading: true,
+  },
+};
+
 export const OnlyIcon: Story = {
   args: {
     ...Primary.args,
