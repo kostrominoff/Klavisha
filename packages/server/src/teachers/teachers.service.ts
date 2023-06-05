@@ -5,7 +5,8 @@ import { Repository } from 'typeorm';
 import { Pagination } from 'src/types/pagination';
 
 type SearchParams = {
-  institutionId: number;
+  institutionId?: number;
+  userId?: number;
 };
 
 @Injectable()
@@ -17,12 +18,15 @@ export class TeachersService {
 
   async findAll(
     { limit = 30, page = 1 }: Pagination,
-    { institutionId }: SearchParams,
+    { institutionId, userId }: SearchParams,
   ) {
     const [teachers, count] = await this.teachersRepository.findAndCount({
       where: {
         institution: {
           id: institutionId,
+          owners: {
+            id: userId,
+          },
         },
       },
       relations: {
