@@ -1,4 +1,4 @@
-import { IRegisterUserDto } from '@klavisha/types';
+import { IRegisterUserDto, Roles } from '@klavisha/types';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNumber, IsString, MinLength } from 'class-validator';
 
@@ -21,6 +21,7 @@ export class RegisterUserDto implements IRegisterUserDto {
   })
   @MinLength(8, { message: 'Пароль должен иметь не менее 8 символов!' })
   password: string;
+
   @ApiProperty({
     description: 'Имя пользователя',
   })

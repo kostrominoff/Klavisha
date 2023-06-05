@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Delete,
@@ -6,6 +7,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  NotFoundException,
   Param,
   ParseIntPipe,
   Patch,
@@ -16,15 +18,31 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { ApiCookieAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/auth/guards/auth.guard';
-import { Roles } from '@klavisha/types';
+import { GuardRoles, Roles } from '@klavisha/types';
 import { CurrentUser } from './decorators/user.decorator';
 import { NO_ACCESS } from 'src/errors/access.errors';
+import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
+import { GroupsService } from 'src/groups/groups.service';
+import { NOT_FOUND } from 'src/errors/group.errors';
+import { InstitutionsService } from 'src/institutions/institutions.service';
 
 @ApiTags('Пользователи')
-@ApiCookieAuth('accessToken')
+@ApiResponse({
+  status: HttpStatus.UNAUTHORIZED,
+  description: 'Пользователь не авторизован',
+})
+@ApiResponse({
+  status: HttpStatus.FORBIDDEN,
+  description: 'Нет доступа',
+})
+@ApiCookieAuth()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly groupsService: GroupsService,
+    private readonly institutionsService: InstitutionsService,
+  ) {}
 
   @ApiResponse({
     status: HttpStatus.OK,
@@ -34,19 +52,13 @@ export class UsersController {
     status: HttpStatus.NOT_FOUND,
     description: 'Пользователь не найден',
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Пользователь не авторизован',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Нет доступа',
-  })
   @HttpCode(HttpStatus.OK)
   @Auth()
   @Get(':id')
   async getOne(@Param('id', ParseIntPipe) userId: number) {
-    return await this.usersService.findOneById(userId);
+    const user = await this.usersService.findOneById(userId);
+    delete user.password;
+    return user;
   }
 
   @ApiResponse({
@@ -57,18 +69,38 @@ export class UsersController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Ошибка валидации тела запроса',
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Пользователь не авторизован',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Нет доступа',
-  })
   @HttpCode(HttpStatus.CREATED)
-  @Auth([Roles.ADMIN, Roles.INSTITUTION_ADMIN])
+  @Auth([GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN])
   @Post()
-  async create(@Body() dto: CreateUserDto) {
+  async create(
+    @CurrentUser('role') role: Roles,
+    @CurrentUser('institutions') institutions: InstitutionEntity[],
+    @Body() dto: CreateUserDto,
+  ) {
+    if (dto.groupId) {
+      const group = await this.groupsService.findOneById(dto.groupId);
+      if (!group) throw new NotFoundException(NOT_FOUND);
+
+      if (
+        role !== Roles.ADMIN &&
+        institutions.some(
+          (institution) => institution.id !== group.institution.id,
+        )
+      )
+        throw new ForbiddenException(NO_ACCESS);
+    }
+
+    if (dto.institutionsId) {
+      const { length } = await this.institutionsService.findAllById(
+        dto.institutionsId,
+      );
+      if (length !== dto.institutionsId.length)
+        throw new BadRequestException('Проверьте учебные заведения');
+    }
+
+    if (dto.role === Roles.ADMIN && role !== Roles.ADMIN)
+      throw new ForbiddenException(NO_ACCESS);
+
     return await this.usersService.create(dto);
   }
 
@@ -77,26 +109,17 @@ export class UsersController {
     status: HttpStatus.OK,
     description: 'Пользователь обновлён',
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Пользователь не авторизован',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Нет доступа',
-  })
   @Auth()
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) userId: number,
     @Body() dto: UpdateUserDto,
     @CurrentUser('id') currentUserId: number,
-    @CurrentUser('roles') currentUserRoles: Roles[],
+    @CurrentUser('role') currentUserRole: Roles,
+    @CurrentUser('institutions') institutions: InstitutionEntity[],
   ) {
-    if (
-      !currentUserRoles.includes(Roles.INSTITUTION_ADMIN) ||
-      !currentUserRoles.includes(Roles.ADMIN)
-    ) {
+    if (!institutions?.length || currentUserRole !== Roles.ADMIN) {
+      delete dto.role;
       const userUpdate = await this.usersService.findOneById(userId);
       if (userUpdate.id !== currentUserId) {
         throw new ForbiddenException(NO_ACCESS);
@@ -110,26 +133,18 @@ export class UsersController {
     status: HttpStatus.OK,
     description: 'Пользователь удалён',
   })
-  @ApiResponse({
-    status: HttpStatus.UNAUTHORIZED,
-    description: 'Пользователь не авторизован',
-  })
-  @ApiResponse({
-    status: HttpStatus.FORBIDDEN,
-    description: 'Нет доступа',
-  })
   @HttpCode(HttpStatus.OK)
-  @Auth([Roles.ADMIN, Roles.INSTITUTION_ADMIN])
+  @Auth([GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN])
   @Delete(':id')
   async delete(
     @Param('id', ParseIntPipe) userId: number,
     @CurrentUser('id') currentUserId: number,
-    @CurrentUser('roles') currentUserRoles: Roles[],
+    @CurrentUser('institutions') institutions: InstitutionEntity[],
   ) {
     // Institution admin cannot delete admin
-    if (currentUserRoles.includes(Roles.INSTITUTION_ADMIN)) {
+    if (institutions?.length) {
       const deleteUser = await this.usersService.findOneById(userId);
-      if (deleteUser.roles.includes(Roles.ADMIN))
+      if (deleteUser.role === Roles.ADMIN)
         throw new ForbiddenException(NO_ACCESS);
     }
     // Cannot delete itself

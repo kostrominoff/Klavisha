@@ -32,13 +32,14 @@ export class AuthService {
     return tokens;
   }
 
-  async register(dto: RegisterUserDto) {
+  async register({ groupId, ...dto }: RegisterUserDto) {
     const user = await this.usersService.findOneByEmail(dto.email);
     if (user) throw new BadRequestException(USER_ALREADY_EXISTS);
 
-    const createdUser = await this.usersService.create(dto);
-
-    // TODO: Update group of user
+    const createdUser = await this.usersService.create({
+      ...dto,
+      groupId,
+    });
 
     const tokens = await this.generateTokens(createdUser.id);
     return tokens;

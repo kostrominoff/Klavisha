@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { USER_ALREADY_EXISTS } from 'src/errors';
 
 @Injectable()
 export class UsersService {
@@ -14,28 +15,45 @@ export class UsersService {
   ) {}
 
   async create({
-    firstname,
-    secondname,
-    fathername,
     password,
-    roles,
-    email,
+    groupId,
+    subgroup,
+    institutionsId,
+    ...dto
   }: CreateUserDto) {
+    // TODO: generate password and send to the email
+
+    const oldUser = await this.findOneByEmail(dto.email);
+    if (oldUser) throw new BadRequestException(USER_ALREADY_EXISTS);
+
+    if (!password) password = 'password';
     const hashedPassword = await hash(password, 10);
-    return await this.userRepository.save({
-      firstname,
-      secondname,
-      fathername,
-      roles,
-      email,
+
+    const user = await this.userRepository.save({
+      ...dto,
+      student: {
+        group: groupId && {
+          id: groupId,
+        },
+        subgroup: subgroup,
+      },
+      institutions: institutionsId?.map((id) => ({ id })),
       password: hashedPassword,
     });
+
+    return user;
   }
 
   async findOneById(id: number) {
     return await this.userRepository.findOne({
       where: {
         id,
+      },
+      relations: {
+        institutions: true,
+        student: {
+          group: true,
+        },
       },
     });
   }
@@ -45,37 +63,19 @@ export class UsersService {
       where: {
         email,
       },
+      loadRelationIds: true,
     });
   }
 
-  async update(
-    id: number,
-    {
-      firstname,
-      secondname,
-      fathername,
-      password,
-      roles,
-      email,
-      birthday,
-      avatar,
-      phone,
-    }: UpdateUserDto,
-  ) {
+  async update(id: number, { password, ...dto }: UpdateUserDto) {
+    if (password) password = await hash(password, 10);
     return await this.userRepository.update(
       {
         id,
       },
       {
-        firstname,
-        secondname,
-        fathername,
+        ...dto,
         password,
-        roles,
-        email,
-        birthday,
-        avatar,
-        phone,
       },
     );
   }

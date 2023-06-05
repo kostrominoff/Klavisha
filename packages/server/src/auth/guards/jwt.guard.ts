@@ -31,7 +31,7 @@ export class JwtGuard extends AuthGuard('jwt') {
 
       if (userByAccessToken)
         return super.canActivate(context) as Promise<boolean>;
-
+    } catch {
       // Refresh token
       const refreshToken = request.cookies.refreshToken;
       if (!refreshToken) throw new UnauthorizedException(NO_AUTH);
@@ -39,7 +39,12 @@ export class JwtGuard extends AuthGuard('jwt') {
       const userByRefreshToken = await this.authService.validateRefreshToken(
         refreshToken,
       );
-      if (!userByRefreshToken) throw new UnauthorizedException(NO_AUTH);
+      if (!userByRefreshToken) {
+        // Clear cookies
+        response.clearCookie('accessToken');
+        response.clearCookie('refreshToken');
+        throw new UnauthorizedException(NO_AUTH);
+      }
 
       // New tokens
       const tokens = await this.authService.generateTokens(
@@ -59,11 +64,6 @@ export class JwtGuard extends AuthGuard('jwt') {
       });
 
       return super.canActivate(context) as Promise<boolean>;
-    } catch {
-      // Clear cookies
-      response.clearCookie('accessToken');
-      response.clearCookie('refreshToken');
-      return false;
     }
   }
 }

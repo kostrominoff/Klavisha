@@ -7,6 +7,7 @@ import { UsersService } from 'src/users/users.service';
 import { NO_AUTH } from 'src/errors';
 import { UserWithoutPassword } from '@klavisha/types';
 import { cookieExtractor } from '../cookie.extractor';
+import { UserEntity } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -21,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: JwtPayload): Promise<UserWithoutPassword> {
+  async validate(payload: JwtPayload): Promise<Omit<UserEntity, 'password'>> {
     const user = await this.usersService.findOneById(payload.userId);
     if (!user) throw new UnauthorizedException(NO_AUTH);
 

@@ -4,6 +4,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeormConfig } from './configs/typeorm.config';
 import { AuthModule } from './auth/auth.module';
+import { InstitutionsModule } from './institutions/institutions.module';
+import { GroupsModule } from './groups/groups.module';
+import { StudentsModule } from './students/students.module';
+import { TeachersModule } from './teachers/teachers.module';
 
 @Module({
   imports: [
@@ -15,6 +19,10 @@ import { AuthModule } from './auth/auth.module';
     }),
     UsersModule,
     AuthModule,
+    InstitutionsModule,
+    GroupsModule,
+    StudentsModule,
+    TeachersModule,
   ],
   controllers: [],
   providers: [],
