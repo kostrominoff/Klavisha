@@ -1,8 +1,10 @@
 import axios from "axios";
 import { AuthService } from "./auth.service";
 
+export const baseURL = process.env.API_URL || "http://localhost:3333";
+
 const axiosInstance = axios.create({
-  baseURL: process.env.API_URL || "http://localhost:3333",
+  baseURL,
   withCredentials: true,
 });
 
