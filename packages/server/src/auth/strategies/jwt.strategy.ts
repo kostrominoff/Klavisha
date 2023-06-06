@@ -5,7 +5,6 @@ import { JwtPayload } from 'src/types/jwt-payload';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from 'src/users/users.service';
 import { NO_AUTH } from 'src/errors';
-import { UserWithoutPassword } from '@klavisha/types';
 import { cookieExtractor } from '../cookie.extractor';
 import { UserEntity } from 'src/users/entities/user.entity';
 
