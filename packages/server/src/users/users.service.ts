@@ -54,6 +54,7 @@ export class UsersService {
         student: {
           group: true,
         },
+        teacher: true,
       },
     });
   }
@@ -63,7 +64,13 @@ export class UsersService {
       where: {
         email,
       },
-      loadRelationIds: true,
+      relations: {
+        institutions: true,
+        student: {
+          group: true,
+        },
+        teacher: true,
+      },
     });
   }
 
