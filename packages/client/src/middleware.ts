@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { baseURL } from "./services";
 import { GuardRoles, Roles } from "@klavisha/types";
 import { NextURL } from "next/dist/server/web/next-url";
+import { UserResponse } from "./types/responses/user.response";
 
 const parseCookie = (cookieName: string, cookies: string[]) =>
   cookies
@@ -56,8 +57,7 @@ export const middleware = async (request: NextRequest) => {
       });
     }
 
-    // TODO: Change type
-    const user: any = await res.json();
+    const user: UserResponse = await res.json();
 
     if (route.path.startsWith("/auth")) {
       if (user) return redirect;
