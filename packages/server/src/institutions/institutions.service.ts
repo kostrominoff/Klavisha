@@ -40,6 +40,7 @@ export class InstitutionsService {
           city: Like(`%${city}%`),
         },
         select: {
+          id: true,
           city: true,
           name: true,
           photo: true,

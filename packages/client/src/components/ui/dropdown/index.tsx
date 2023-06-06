@@ -27,6 +27,9 @@ type DropdownBaseType<OptionValue> = {
   label?: string;
   limit?: number;
   fullWidth?: boolean;
+  onFilterChange?: (filter: string) => void;
+  filter?: string;
+  disableFilter?: boolean;
 };
 
 type NotNullableDropdown<OptionValue> = {
@@ -73,18 +76,27 @@ const Dropdown = <T,>({
   limit,
   fullWidth,
   customRef,
+  filter: controlledFilter,
+  onFilterChange,
+  disableFilter,
   ...props
 }: DropdownProps<T> & { customRef?: Ref<HTMLInputElement> }) => {
   const [localValue, setLocalValue] = useState<T[] | T | null>(
     value || multiple ? [] : null
   );
   const [isOpen, { setTrue: open, setFalse: close }] = useBoolean();
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState(controlledFilter || "");
+
+  useEffect(() => {
+    if (!onFilterChange) return;
+    onFilterChange(filter);
+  }, [filter, onFilterChange]);
 
   const filteredOptions = useFilter(
     filter,
     options,
-    !filter ? limit : undefined
+    !filter ? limit : undefined,
+    disableFilter
   );
 
   const inputPlaceholder = usePlaceholder({

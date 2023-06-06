@@ -1,5 +1,6 @@
 import axios from "axios";
 import { AuthService } from "./auth.service";
+import { InstitutionsService } from "./institutuions.service";
 
 export const baseURL = process.env.API_URL || "http://localhost:3333";
 
@@ -23,6 +24,7 @@ if (isServer) {
 const Api = {
   axios: axiosInstance,
   auth: AuthService(axiosInstance),
+  institutions: InstitutionsService(axiosInstance),
 };
 
 export default Api;
