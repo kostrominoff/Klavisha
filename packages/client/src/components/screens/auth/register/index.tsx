@@ -3,16 +3,16 @@
 import Dropdown from "@/components/ui/dropdown";
 import Input from "@/components/ui/input";
 import Api from "@/services";
-import { IRegisterUserDto, Institution } from "@klavisha/types";
+import { InstitutionsResponse } from "@/types/responses/institutions.response";
+import { IRegisterUserDto } from "@klavisha/types";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
-  institutions: Institution[];
+  institutions: InstitutionsResponse;
 };
 
 // TODO: It is test, maybe need zustand
-// TODO: Create response types
 
 const RegisterScreen = ({ institutions }: Props) => {
   const { register } = useForm<IRegisterUserDto>();
