@@ -2,52 +2,37 @@
 
 import Dropdown from "@/components/ui/dropdown";
 import Input from "@/components/ui/input";
+import { useAsyncOptions } from "@/hooks/async-options.hook";
 import Api from "@/services";
 import { InstitutionsResponse } from "@/types/responses/institutions.response";
 import { IRegisterUserDto } from "@klavisha/types";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 type Props = {
   institutions: InstitutionsResponse;
 };
 
-// TODO: It is test, maybe need zustand
+const makeOptionsFn = (institutions: InstitutionsResponse) =>
+  institutions.map((institution) => ({
+    label: `${institution.name} (${institution.city})`,
+    value: institution.id,
+  }));
+
+const filterFn = async (filter: string) =>
+  (await Api.institutions.findAll(filter)).institutions;
 
 const RegisterScreen = ({ institutions }: Props) => {
   const { register } = useForm<IRegisterUserDto>();
-  const [institutionOptions, setInstitutionOptions] = useState(
-    institutions.map((institution) => ({
-      label: `${institution.name} (${institution.city})`,
-      value: institution.id,
-    }))
-  );
 
-  const [institutionFilter, setInstitutionFilter] = useState("");
-  console.log(institutionFilter, institutionOptions);
-
-  useEffect(() => {
-    if (!institutionFilter)
-      return setInstitutionOptions(
-        institutions.map((institution) => ({
-          label: `${institution.name} (${institution.city})`,
-          value: institution.id,
-        }))
-      );
-    const getNewInstitutions = async () => {
-      const { institutions } = await Api.institutions.findAll(
-        institutionFilter
-      );
-      setInstitutionOptions(
-        institutions.map((institution) => ({
-          label: `${institution.name} (${institution.city})`,
-          value: institution.id,
-        }))
-      );
-    };
-
-    getNewInstitutions();
-  }, [institutionFilter, institutions]);
+  const {
+    filter: institutionFilter,
+    setFilter: setInstitutionFilter,
+    options: institutionOptions,
+  } = useAsyncOptions({
+    initialData: institutions,
+    makeOptionsFn,
+    filterFn,
+  });
 
   return (
     <section className="flex justify-center items-center min-h-screen">
