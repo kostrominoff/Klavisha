@@ -27,7 +27,6 @@ const LoginForm = () => {
     formState: { errors },
   } = useForm<FormData>({
     resolver: yupResolver(schema),
-    mode: "onBlur",
   });
 
   const submitHandler: SubmitHandler<FormData> = (data) => {
