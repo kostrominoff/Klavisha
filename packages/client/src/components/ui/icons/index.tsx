@@ -6,6 +6,8 @@ import ButtonLoadingPrimary from "./button-loading-primary.svg";
 import ButtonLoadingOnlyIcon from "./button-loading-only-icon.svg";
 import ButtonLoadingPrimaryOnlyIcon from "./button-loading-primary-only-icon.svg";
 import Checkbox from "./checkbox.svg";
+import Eye from "./eye.svg";
+import EyeOff from "./eye-off.svg";
 
 type ButtonLoadingProps = {
   primary?: boolean;
@@ -27,6 +29,8 @@ const Icons = {
     }
   },
   checkbox: () => <Checkbox />,
+  eye: () => <Eye />,
+  eyeOff: () => <EyeOff />,
 };
 
 export default Icons;

@@ -1,54 +1,24 @@
-"use client";
-
-import Dropdown from "@/components/ui/dropdown";
-import Input from "@/components/ui/input";
-import { useAsyncOptions } from "@/hooks/async-options.hook";
-import Api from "@/services";
 import { InstitutionsResponse } from "@/types/responses/institutions.response";
-import { IRegisterUserDto } from "@klavisha/types";
-import { useForm } from "react-hook-form";
+import RegisterForm from "./form";
+import Typography from "@/components/ui/typography";
+import Link from "next/link";
 
 type Props = {
   institutions: InstitutionsResponse;
 };
 
-const makeOptionsFn = (institutions: InstitutionsResponse) =>
-  institutions.map((institution) => ({
-    label: `${institution.name} (${institution.city})`,
-    value: institution.id,
-  }));
-
-const filterFn = async (filter: string) =>
-  (await Api.institutions.findAll(filter)).institutions;
-
 const RegisterScreen = ({ institutions }: Props) => {
-  const { register } = useForm<IRegisterUserDto>();
-
-  const {
-    filter: institutionFilter,
-    setFilter: setInstitutionFilter,
-    options: institutionOptions,
-  } = useAsyncOptions({
-    initialData: institutions,
-    makeOptionsFn,
-    filterFn,
-  });
-
   return (
-    <section className="flex justify-center items-center min-h-screen">
-      <form>
-        <Input {...register("firstname")} />
-        <Input {...register("secondname")} />
-        <Input {...register("fathername")} />
-        <Input {...register("email")} />
-        <Input {...register("password")} />
-        <Dropdown
-          options={institutionOptions}
-          filter={institutionFilter}
-          onFilterChange={setInstitutionFilter}
-          disableFilter
-        />
-      </form>
+    <section className="flex flex-col gap-4 justify-center items-center min-h-screen">
+      <Typography tag="h1" variant="h2">
+        Регистрация
+      </Typography>
+      <RegisterForm institutions={institutions} />
+      <Link href="/auth/login">
+        <Typography tag="span" variant="text1">
+          Есть аккаунт?
+        </Typography>
+      </Link>
     </section>
   );
 };

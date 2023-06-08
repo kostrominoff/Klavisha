@@ -161,47 +161,45 @@ const Dropdown = <T,>({
   }, [localValue, onChange, nullable, multiple]);
 
   return (
-    <div className="inline-block">
-      <div
-        className={clsx("inline-block relative", {
-          "w-full": fullWidth,
+    <div
+      className={clsx("inline-flex relative", {
+        "w-full": fullWidth,
+      })}
+      onFocus={open}
+      onBlur={blurHandler}
+    >
+      <Input
+        className={clsx({
+          "placeholder:text-slate-900":
+            multiple && isArray(localValue) ? localValue.length : localValue,
         })}
-        onFocus={open}
-        onBlur={blurHandler}
-      >
-        <Input
-          className={clsx({
-            "placeholder:text-slate-900":
-              multiple && isArray(localValue) ? localValue.length : localValue,
-          })}
-          fullWidth={fullWidth}
-          value={filter}
-          onChange={inputChangeHandler}
-          placeholder={inputPlaceholder}
-          error={error}
-          label={label}
-          ref={customRef}
-          iconRight={
-            <button tabIndex={-1} type="button" className="flex" onClick={open}>
-              <Icons.arrowDown />
-            </button>
-          }
-          {...props}
-        />
-        <AnimatePresence>
-          {isOpen && (
-            <DropdownMenu
-              onChange={changeHandler}
-              value={localValue}
-              multiple={multiple}
-              options={filteredOptions}
-              clearFilter={clearFilter}
-              placeholder={placeholder}
-              nullable={nullable}
-            />
-          )}
-        </AnimatePresence>
-      </div>
+        fullWidth={fullWidth}
+        value={filter}
+        onChange={inputChangeHandler}
+        placeholder={inputPlaceholder}
+        error={error}
+        label={label}
+        ref={customRef}
+        iconRight={
+          <button tabIndex={-1} type="button" className="flex" onClick={open}>
+            <Icons.arrowDown />
+          </button>
+        }
+        {...props}
+      />
+      <AnimatePresence>
+        {isOpen && (
+          <DropdownMenu
+            onChange={changeHandler}
+            value={localValue}
+            multiple={multiple}
+            options={filteredOptions}
+            clearFilter={clearFilter}
+            placeholder={placeholder}
+            nullable={nullable}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 };
