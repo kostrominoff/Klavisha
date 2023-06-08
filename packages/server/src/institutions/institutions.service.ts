@@ -1,7 +1,7 @@
 import { ForbiddenException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { InstitutionEntity } from './entities/institution.entity';
-import { In, Like, Repository } from 'typeorm';
+import { ILike, In, Repository } from 'typeorm';
 import { CreateInstitutionDto } from './dto/create-institution.dto';
 import { UpdateInstitutionDto } from './dto/update-institution.dto';
 import { NO_ACCESS } from 'src/errors/access.errors';
@@ -36,8 +36,8 @@ export class InstitutionsService {
         skip: (page - 1) * limit,
         take: limit,
         where: {
-          name: Like(`%${name}%`),
-          city: Like(`%${city}%`),
+          name: ILike(`%${name}%`),
+          city: ILike(`%${city}%`),
         },
         select: {
           id: true,
