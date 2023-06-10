@@ -30,8 +30,10 @@ export const middleware = async (request: NextRequest) => {
       },
     });
 
-    if (!res.ok)
-      return NextResponse.redirect(new URL("/auth/login", request.url));
+    if (!res.ok) {
+      if (route.path.startsWith("/auth")) return NextResponse.next();
+      else return NextResponse.redirect(new URL("/auth/login", request.url));
+    }
 
     const cookies = res.headers.get("set-cookie")?.split(", ") || [];
     const response = NextResponse.next();
@@ -63,10 +65,7 @@ export const middleware = async (request: NextRequest) => {
 
     const user: UserResponse = await res.json();
 
-    if (route.path.startsWith("/auth")) {
-      if (user) return redirect;
-      else return response;
-    }
+    if (route.path.startsWith("/auth") && user) return redirect;
 
     if (!route.roles) return response;
 
