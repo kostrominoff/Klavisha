@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "@/components/ui/input";
 import { InstitutionsResponse } from "@/types/responses/institutions.response";
 import Password from "@/components/ui/input/password";
+import { useRegister } from "@/services/auth.hooks";
 
 type Props = {
   institutions: InstitutionsResponse;
@@ -38,9 +39,10 @@ const RegisterForm = ({ institutions }: Props) => {
     resolver: yupResolver(schema),
   });
 
+  const { mutate, isLoading } = useRegister();
+
   const submitHandler: SubmitHandler<FormData> = (data) => {
-    console.log(data);
-    console.log("form sended!");
+    mutate(data);
   };
   return (
     <form
@@ -75,7 +77,9 @@ const RegisterForm = ({ institutions }: Props) => {
         resetField={resetField}
         error={errors.groupId?.message}
       />
-      <Button type="submit">Создать</Button>
+      <Button loading={isLoading} type="submit">
+        Создать
+      </Button>
     </form>
   );
 };

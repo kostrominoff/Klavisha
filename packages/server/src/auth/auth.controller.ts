@@ -60,9 +60,11 @@ export class AuthController {
     const tokens = await this.authService.login(dto);
     response.cookie('accessToken', tokens.accessToken, {
       httpOnly: true,
+      sameSite: 'none',
     });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
+      sameSite: 'none',
     });
     return tokens;
   }
@@ -83,9 +85,11 @@ export class AuthController {
     const tokens = await this.authService.register(dto);
     response.cookie('accessToken', tokens.accessToken, {
       httpOnly: true,
+      sameSite: 'none',
     });
     response.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
+      sameSite: 'none',
     });
     return tokens;
   }

@@ -43,17 +43,21 @@ export const middleware = async (request: NextRequest) => {
     if (accessToken) {
       response.cookies.set("accessToken", accessToken, {
         httpOnly: true,
+        sameSite: "none",
       });
       redirect.cookies.set("accessToken", accessToken, {
         httpOnly: true,
+        sameSite: "none",
       });
     }
     if (refreshToken) {
       response.cookies.set("refreshToken", refreshToken, {
         httpOnly: true,
+        sameSite: "none",
       });
       redirect.cookies.set("refreshToken", refreshToken, {
         httpOnly: true,
+        sameSite: "none",
       });
     }
 

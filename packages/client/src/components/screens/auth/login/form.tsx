@@ -3,6 +3,7 @@
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import Password from "@/components/ui/input/password";
+import { useLogin } from "@/services/auth.hooks";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ILoginUserDto } from "@klavisha/types";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -26,9 +27,10 @@ const LoginForm = () => {
     resolver: yupResolver(schema),
   });
 
+  const { mutate, isLoading } = useLogin();
+
   const submitHandler: SubmitHandler<FormData> = (data) => {
-    console.log(data);
-    console.log("form sended!");
+    mutate(data);
   };
 
   return (
@@ -47,7 +49,9 @@ const LoginForm = () => {
         error={errors.password?.message}
         {...register("password")}
       />
-      <Button type="submit">Войти</Button>
+      <Button loading={isLoading} type="submit">
+        Войти
+      </Button>
     </form>
   );
 };

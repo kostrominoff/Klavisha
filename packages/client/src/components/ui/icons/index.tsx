@@ -8,6 +8,9 @@ import ButtonLoadingPrimaryOnlyIcon from "./button-loading-primary-only-icon.svg
 import Checkbox from "./checkbox.svg";
 import Eye from "./eye.svg";
 import EyeOff from "./eye-off.svg";
+import NotifySuccess from "./notify-success.svg";
+import NotifyError from "./notify-error.svg";
+import { Status } from "@/components/layouts/toast";
 
 type ButtonLoadingProps = {
   primary?: boolean;
@@ -31,6 +34,12 @@ const Icons = {
   checkbox: () => <Checkbox />,
   eye: () => <Eye />,
   eyeOff: () => <EyeOff />,
+  // notifyIcon: (status: Status) => {
+  //   if (status === "success") return <NotifySuccess />;
+  //   else return <NotifyError />;
+  // },
+  notifySuccess: () => <NotifySuccess />,
+  notifyError: () => <NotifyError />,
 };
 
 export default Icons;
