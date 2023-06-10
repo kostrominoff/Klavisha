@@ -65,7 +65,7 @@ const Input = forwardRef<HTMLInputElement, Props>(
           />
           {iconRight && <div className="relative mr-3">{iconRight}</div>}
         </div>
-        <AnimatePresence>
+        <AnimatePresence initial={false}>
           {error && (
             <motion.span
               initial={{

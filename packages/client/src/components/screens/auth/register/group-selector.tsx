@@ -78,41 +78,39 @@ const GroupSelector = ({ institutions, control, error, resetField }: Props) => {
         error={institutionError()}
         disableFilter
       />
-      <AnimatePresence>
-        {institutionId && !!groupsOptions.length && (
-          <motion.div
-            initial={{
-              height: 0,
-              opacity: 0,
-              marginTop: 0,
-            }}
-            animate={{
-              height: "auto",
-              opacity: 1,
-              marginTop: "0.75rem",
-            }}
-            exit={{
-              height: 0,
-              opacity: 0,
-              marginTop: 0,
-            }}
-          >
-            <Controller
-              control={control}
-              name="groupId"
-              render={({ field: { ref, ...field } }) => (
-                <Dropdown
-                  placeholder="Выберите группу"
-                  options={groupsOptions}
-                  customRef={ref}
-                  error={error}
-                  {...field}
-                />
-              )}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {institutionId && !!groupsOptions.length && (
+        <motion.div
+          initial={{
+            height: 0,
+            opacity: 0,
+            marginTop: 0,
+          }}
+          animate={{
+            height: "auto",
+            opacity: 1,
+            marginTop: "0.75rem",
+          }}
+          exit={{
+            height: 0,
+            opacity: 0,
+            marginTop: 0,
+          }}
+        >
+          <Controller
+            control={control}
+            name="groupId"
+            render={({ field: { ref, ...field } }) => (
+              <Dropdown
+                placeholder="Выберите группу"
+                options={groupsOptions}
+                customRef={ref}
+                error={error}
+                {...field}
+              />
+            )}
+          />
+        </motion.div>
+      )}
     </div>
   );
 };
