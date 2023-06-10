@@ -14,7 +14,7 @@ type ProtectedRoute = {
   roles?: GuardRoles[];
 };
 
-const protectedRoutes: ProtectedRoute[] = [];
+const protectedRoutes: ProtectedRoute[] = [{ path: "/auth" }];
 
 export const middleware = async (request: NextRequest) => {
   const route = protectedRoutes.find((route) =>
