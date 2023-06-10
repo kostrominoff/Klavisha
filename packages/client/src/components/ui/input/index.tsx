@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { InputHTMLAttributes, ReactNode, forwardRef, useId } from "react";
 import Typography from "../typography";
 
-type Props = {
+export type Props = {
   iconLeft?: ReactNode;
   iconRight?: ReactNode;
   label?: string;

@@ -1,9 +1,8 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import Icons from "@/components/ui/icons";
 import Input from "@/components/ui/input";
-import { useBoolean } from "@/hooks/boolean.hook";
+import Password from "@/components/ui/input/password";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ILoginUserDto } from "@klavisha/types";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -19,8 +18,6 @@ const schema: ObjectSchema<ILoginUserDto> = object({
 type FormData = InferType<typeof schema>;
 
 const LoginForm = () => {
-  const [isPasswordHidden, { toggle: toggleIsPasswordHidden }] =
-    useBoolean(true);
   const {
     register,
     handleSubmit,
@@ -44,19 +41,10 @@ const LoginForm = () => {
         error={errors.email?.message}
         {...register("email")}
       />
-      <Input
+      <Password
         placeholder="Пароль"
-        type={isPasswordHidden ? "password" : "text"}
+        autoComplete="new-password"
         error={errors.password?.message}
-        iconRight={
-          <button
-            type="button"
-            className="flex"
-            onClick={toggleIsPasswordHidden}
-          >
-            {isPasswordHidden ? <Icons.eye /> : <Icons.eyeOff />}
-          </button>
-        }
         {...register("password")}
       />
       <Button type="submit">Войти</Button>

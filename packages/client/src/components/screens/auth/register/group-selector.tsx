@@ -4,7 +4,7 @@ import { useAsyncOptions } from "@/hooks/async-options.hook";
 import Api from "@/services";
 import { InstitutionsResponse } from "@/types/responses/institutions.response";
 import { IRegisterUserDto } from "@klavisha/types";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Control, Controller, UseFormResetField } from "react-hook-form";
 
