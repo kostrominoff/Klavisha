@@ -1,4 +1,5 @@
 import { InstitutionsFindAllResponse } from "@/types/responses/institutions.response";
+import { ICreateInstitutionDto } from "@klavisha/types";
 import { AxiosInstance } from "axios";
 
 export const InstitutionsService = (axios: AxiosInstance) => ({
@@ -12,5 +13,8 @@ export const InstitutionsService = (axios: AxiosInstance) => ({
       }
     );
     return data;
+  },
+  async create(dto: ICreateInstitutionDto) {
+    return await axios.post("/institutions", dto);
   },
 });

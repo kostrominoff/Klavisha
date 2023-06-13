@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Input from "@/components/ui/input";
 import { InstitutionsResponse } from "@/types/responses/institutions.response";
 import Password from "@/components/ui/input/password";
-import { useRegister } from "@/services/auth.hooks";
+import { useRegister } from "@/hooks/auth.hooks";
 
 type Props = {
   institutions: InstitutionsResponse;

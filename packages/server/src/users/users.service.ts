@@ -6,13 +6,28 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { USER_ALREADY_EXISTS } from 'src/errors';
+import { Roles } from '@klavisha/types';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-  ) {}
+  ) {
+    // Create admin user
+    userRepository
+      .findOne({ where: { email: 'kostromin@ngsquad.ru' } })
+      .then((result) => {
+        if (!result)
+          this.create({
+            email: 'kostromin@ngsquad.ru',
+            password: 'password',
+            role: Roles.ADMIN,
+            firstname: 'Админ',
+            secondname: 'Админович',
+          });
+      });
+  }
 
   async create({
     password,
