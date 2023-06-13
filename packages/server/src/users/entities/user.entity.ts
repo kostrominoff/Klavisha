@@ -47,6 +47,7 @@ export class UserEntity implements User {
   @Column({ nullable: true })
   fullname: string;
 
+  // FIX: Without afterLoad field is empty
   @AfterLoad()
   @AfterInsert()
   @AfterUpdate()
