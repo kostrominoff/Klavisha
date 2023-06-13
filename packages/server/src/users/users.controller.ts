@@ -12,11 +12,12 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiCookieAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/auth/guards/auth.guard';
 import { GuardRoles, Roles } from '@klavisha/types';
 import { CurrentUser } from './decorators/user.decorator';
@@ -59,6 +60,26 @@ export class UsersController {
     const user = await this.usersService.findOneById(userId);
     delete user.password;
     return user;
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Успешный ответ',
+  })
+  @ApiQuery({ name: 'limit', example: 10, required: false })
+  @ApiQuery({ name: 'page', example: 1, required: false })
+  @ApiQuery({ name: 'name', example: 'Иван Иванов', required: false })
+  @ApiQuery({ name: 'email', example: 'ivan@example.com', required: false })
+  @Auth([GuardRoles.ADMIN])
+  @ApiCookieAuth()
+  @Get()
+  async getAll(
+    @Query('limit') limit?: number,
+    @Query('page') page?: number,
+    @Query('name') name = '',
+    @Query('email') email = '',
+  ) {
+    return await this.usersService.findAll({ limit, page }, { email, name });
   }
 
   @ApiResponse({

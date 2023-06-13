@@ -3,6 +3,9 @@ import { InstitutionEntity } from 'src/institutions/entities/institution.entity'
 import { StudentEntity } from 'src/students/entities/student.entity';
 import { TeacherEntity } from 'src/teachers/entities/teacher.entity';
 import {
+  AfterInsert,
+  AfterLoad,
+  AfterUpdate,
   Column,
   CreateDateColumn,
   Entity,
@@ -40,6 +43,18 @@ export class UserEntity implements User {
   createdAt: Date;
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @Column({ nullable: true })
+  fullname: string;
+
+  @AfterLoad()
+  @AfterInsert()
+  @AfterUpdate()
+  setFullname() {
+    this.fullname = `${this.secondname} ${this.firstname} ${
+      this.fathername ? this.fathername : ''
+    }`.trim();
+  }
 
   @ManyToMany(() => InstitutionEntity, (institution) => institution.owners)
   @JoinTable()

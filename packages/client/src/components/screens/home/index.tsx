@@ -5,7 +5,6 @@ const HomeScreen = () => {
   return (
     <div>
       <Hero />
-      {/* @ts-ignore */}
       <Institutions />
     </div>
   );

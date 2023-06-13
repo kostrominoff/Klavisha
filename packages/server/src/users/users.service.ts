@@ -1,12 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { hash } from 'bcrypt';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { USER_ALREADY_EXISTS } from 'src/errors';
 import { Roles } from '@klavisha/types';
+import { Pagination } from 'src/types/pagination';
+
+type SearchParams = {
+  name?: string;
+  email?: string;
+};
 
 @Injectable()
 export class UsersService {
@@ -27,6 +33,58 @@ export class UsersService {
             secondname: 'Админович',
           });
       });
+  }
+
+  async findAll(
+    { limit = 30, page = 1 }: Pagination,
+    { name, email }: SearchParams,
+  ) {
+    const [users, count] = await this.userRepository.findAndCount({
+      relations: {
+        institutions: true,
+        teacher: true,
+        student: true,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+      where: {
+        email: ILike(`%${email}%`),
+        // TODO: Search by fullname
+      },
+      select: {
+        fullname: true,
+        firstname: true,
+        secondname: true,
+        fathername: true,
+        id: true,
+        email: true,
+        phone: true,
+        role: true,
+        avatar: true,
+        birthday: true,
+        student: {
+          id: true,
+          subgroup: true,
+          group: {
+            id: true,
+            name: true,
+          },
+        },
+        teacher: {
+          id: true,
+          institution: {
+            id: true,
+          },
+        },
+        institutions: true,
+      },
+    });
+    const pages = Math.ceil(count / limit);
+    return {
+      users,
+      count,
+      pages,
+    };
   }
 
   async create({

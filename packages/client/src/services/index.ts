@@ -2,6 +2,7 @@ import axios from "axios";
 import { AuthService } from "./auth.service";
 import { InstitutionsService } from "./institutuions.service";
 import { GroupsService } from "./groups.service";
+import { UsersService } from "./users.service";
 
 export const baseURL = process.env.API_URL || "http://localhost:3333";
 
@@ -27,6 +28,7 @@ const Api = {
   auth: AuthService(axiosInstance),
   institutions: InstitutionsService(axiosInstance),
   groups: GroupsService(axiosInstance),
+  users: UsersService(axiosInstance),
 };
 
 export default Api;
