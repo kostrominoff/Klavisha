@@ -3,7 +3,7 @@
 import Button from "@/components/ui/button";
 import Input from "@/components/ui/input";
 import Password from "@/components/ui/input/password";
-import { useLogin } from "@/services/auth.hooks";
+import { useLogin } from "@/hooks/auth.hooks";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { ILoginUserDto } from "@klavisha/types";
 import { SubmitHandler, useForm } from "react-hook-form";
