@@ -49,7 +49,7 @@ export class UsersService {
       take: limit,
       where: {
         email: ILike(`%${email}%`),
-        // TODO: Search by fullname
+        fullname: ILike(`%${name}%`),
       },
       select: {
         fullname: true,

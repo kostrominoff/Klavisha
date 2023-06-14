@@ -162,44 +162,48 @@ const Dropdown = <T,>({
 
   return (
     <div
-      className={clsx("inline-flex relative", {
+      className={clsx("inline-block", {
         "w-full": fullWidth,
       })}
-      onFocus={open}
-      onBlur={blurHandler}
     >
-      <Input
-        className={clsx({
-          "placeholder:text-slate-900":
-            multiple && isArray(localValue) ? localValue.length : localValue,
-        })}
-        fullWidth={fullWidth}
-        value={filter}
-        onChange={inputChangeHandler}
-        placeholder={inputPlaceholder}
-        error={error}
-        label={label}
-        ref={customRef}
-        iconRight={
-          <button tabIndex={-1} type="button" className="flex" onClick={open}>
-            <Icons.arrowDown />
-          </button>
-        }
-        {...props}
-      />
-      <AnimatePresence>
-        {isOpen && (
-          <DropdownMenu
-            onChange={changeHandler}
-            value={localValue}
-            multiple={multiple}
-            options={filteredOptions}
-            clearFilter={clearFilter}
-            placeholder={placeholder}
-            nullable={nullable}
-          />
-        )}
-      </AnimatePresence>
+      <div
+        className="inline-block relative"
+        onFocus={open}
+        onBlur={blurHandler}
+      >
+        <Input
+          className={clsx({
+            "placeholder:text-slate-900":
+              multiple && isArray(localValue) ? localValue.length : localValue,
+          })}
+          fullWidth={fullWidth}
+          value={filter}
+          onChange={inputChangeHandler}
+          placeholder={inputPlaceholder}
+          error={error}
+          label={label}
+          ref={customRef}
+          iconRight={
+            <button tabIndex={-1} type="button" className="flex" onClick={open}>
+              <Icons.arrowDown />
+            </button>
+          }
+          {...props}
+        />
+        <AnimatePresence>
+          {isOpen && (
+            <DropdownMenu
+              onChange={changeHandler}
+              value={localValue}
+              multiple={multiple}
+              options={filteredOptions}
+              clearFilter={clearFilter}
+              placeholder={placeholder}
+              nullable={nullable}
+            />
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };
