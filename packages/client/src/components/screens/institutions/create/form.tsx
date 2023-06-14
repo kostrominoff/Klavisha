@@ -1,16 +1,19 @@
 "use client";
 
+import Button from "@/components/ui/button";
 import Dropdown from "@/components/ui/dropdown";
 import Input from "@/components/ui/input";
 import { useAsyncOptions } from "@/hooks/async-options.hook";
+import { useCreateInstitution } from "@/hooks/institutions.hooks";
 import Api from "@/services";
 import { UsersResponse } from "@/types/responses/user.response";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { ICreateInstitutionDto } from "@klavisha/types";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { InferType, ObjectSchema, array, number, object, string } from "yup";
 
 const schema: ObjectSchema<ICreateInstitutionDto> = object({
-  name: string().required("Введите название!").nonNullable(),
+  name: string().required("Введите название!"),
   phone: string().notRequired().nonNullable(),
   photo: string().notRequired().nonNullable(),
   description: string().notRequired().nonNullable(),
@@ -44,10 +47,15 @@ const CreateInstitutionForm = ({ users }: Props) => {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
+
+  const { mutate, isLoading } = useCreateInstitution();
 
   const submitHandler: SubmitHandler<FormData> = (data) => {
     console.log(data);
+    mutate(data);
   };
 
   const { options, filter, setFilter } = useAsyncOptions({
@@ -57,7 +65,6 @@ const CreateInstitutionForm = ({ users }: Props) => {
   });
 
   // TODO: Add photo uploader and create markdown editor
-  // TODO: Async options (Dropdown)
   return (
     <form
       className="flex flex-col gap-3"
@@ -73,24 +80,28 @@ const CreateInstitutionForm = ({ users }: Props) => {
         error={errors.city?.message}
         {...register("city")}
       />
-      <Input {...register("phone")} />
-      <Input {...register("website")} />
+      <Input placeholder="Номер телефона" {...register("phone")} />
+      <Input placeholder="Ссылка на сайт" {...register("website")} />
       <Controller
         name="owners"
         control={control}
         render={({ field: { ref, ...field } }) => (
           <Dropdown
+            placeholder="Администраторы"
             options={options}
             filter={filter}
             onFilterChange={setFilter}
             error={errors.owners?.message}
             customRef={ref}
-            {...field}
             multiple
             disableFilter
+            {...field}
           />
         )}
       />
+      <Button type="submit" loading={isLoading}>
+        Создать
+      </Button>
     </form>
   );
 };

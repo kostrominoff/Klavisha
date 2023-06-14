@@ -5,8 +5,10 @@ import Api from "@/services";
 const CreateInstitutionsScreen = async () => {
   const { users } = await Api.users.findAll();
   return (
-    <section>
-      <Typography tag="h1">Создание уч. заведения</Typography>
+    <section className="flex flex-col gap-3 justify-center items-center min-h-screen">
+      <Typography tag="h1" variant="h2">
+        Создание уч. заведения
+      </Typography>
       <CreateInstitutionForm users={users} />
     </section>
   );

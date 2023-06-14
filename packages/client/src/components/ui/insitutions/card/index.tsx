@@ -12,11 +12,13 @@ const InstitutionCard = ({ institution }: Props) => {
   return (
     <li>
       <Link href={`/institutions/${institution.id}`}>
-        <Image
-          src={`${baseURL}/${institution.photo}`}
-          alt={`Фотография ${institution.name}`}
-          fill
-        />
+        {institution.photo && (
+          <Image
+            src={`${baseURL}/${institution.photo}`}
+            alt={`Фотография ${institution.name}`}
+            fill
+          />
+        )}
         <Typography tag="h3" variant="h3">
           {institution.name}
         </Typography>
