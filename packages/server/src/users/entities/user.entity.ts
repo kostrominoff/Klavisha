@@ -1,4 +1,5 @@
 import { Roles, User } from '@klavisha/types';
+import { FileEntity } from 'src/files/entities/file.entity';
 import { InstitutionEntity } from 'src/institutions/entities/institution.entity';
 import { StudentEntity } from 'src/students/entities/student.entity';
 import { TeacherEntity } from 'src/teachers/entities/teacher.entity';
@@ -9,6 +10,7 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -67,4 +69,7 @@ export class UserEntity implements User {
   })
   @JoinColumn()
   teacher: TeacherEntity;
+
+  @OneToMany(() => FileEntity, (file) => file.user)
+  files: FileEntity[];
 }

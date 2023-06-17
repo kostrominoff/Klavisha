@@ -3,6 +3,7 @@
 import Button from "@/components/ui/button";
 import Dropdown from "@/components/ui/dropdown";
 import Input from "@/components/ui/input";
+import FileUploader from "@/components/ui/input/file";
 import { useAsyncOptions } from "@/hooks/async-options.hook";
 import { useCreateInstitution } from "@/hooks/institutions.hooks";
 import Api from "@/services";
@@ -99,6 +100,7 @@ const CreateInstitutionForm = ({ users }: Props) => {
           />
         )}
       />
+      <FileUploader accept="image/*" />
       <Button type="submit" loading={isLoading}>
         Создать
       </Button>
