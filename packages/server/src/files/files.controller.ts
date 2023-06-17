@@ -29,7 +29,7 @@ export class FilesController {
 
   @ApiResponse({
     status: HttpStatus.CREATED,
-    description: 'Файл сохранён',
+    description: 'Файлы сохранёны',
   })
   @ApiCookieAuth()
   @ApiConsumes('multipart/form-data')
@@ -37,9 +37,12 @@ export class FilesController {
     schema: {
       type: 'object',
       properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
+        files: {
+          type: 'array',
+          items: {
+            type: 'string',
+            format: 'binary',
+          },
         },
       },
     },
@@ -47,7 +50,7 @@ export class FilesController {
   @Auth()
   @Post()
   @UseInterceptors(
-    FilesInterceptor('file', 1, {
+    FilesInterceptor('files', 10, {
       storage: diskStorage({
         destination: './uploads',
         filename(_req, file, callback) {
@@ -60,6 +63,6 @@ export class FilesController {
     @CurrentUser('id') userId: number,
     @UploadedFiles() files: Express.Multer.File[],
   ) {
-    return await this.filesService.create(userId, files[0]);
+    return await this.filesService.create(userId, files);
   }
 }

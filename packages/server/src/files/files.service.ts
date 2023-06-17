@@ -9,14 +9,16 @@ export class FilesService {
     @InjectRepository(FileEntity)
     private readonly fileRepository: Repository<FileEntity>,
   ) {}
-  async create(userId: number, file: Express.Multer.File) {
-    return await this.fileRepository.save({
-      filename: file.filename,
-      mimetype: file.mimetype,
-      originalName: file.originalname,
-      user: {
-        id: userId,
-      },
-    });
+  async create(userId: number, files: Express.Multer.File[]) {
+    return await this.fileRepository.save(
+      files.map((file) => ({
+        filename: file.filename,
+        mimetype: file.mimetype,
+        originalName: file.originalname,
+        user: {
+          id: userId,
+        },
+      })),
+    );
   }
 }

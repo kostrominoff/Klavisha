@@ -1,24 +1,84 @@
-import { InputHTMLAttributes, useRef } from "react";
+import { ChangeEvent, InputHTMLAttributes, useEffect, useRef } from "react";
 import Button from "../../button";
+import { useFilesUpload } from "@/hooks/files.hooks";
+import { FileType } from "@klavisha/types";
 
-type Props = {} & Omit<InputHTMLAttributes<HTMLInputElement>, "type">;
+type Props = {
+  value?: FileType[];
+  onChange?: (files: FileType[]) => void;
+  multiple?: boolean;
+} & Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "value" | "onChange">;
 
-// TODO: Upload file and return filepath.
-// Change button children to original filename
+// TODO: React hook form support
 // Create a storage
-const FileUploader = ({ children, ...props }: Props) => {
+const FileUploader = ({
+  children,
+  multiple,
+  value,
+  onChange,
+  ...props
+}: Props) => {
+  const { data, mutate, isLoading, isSuccess } = useFilesUpload();
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (data && isSuccess && onChange) {
+      onChange(data.data);
+    }
+  }, [data, isSuccess, onChange]);
 
   const buttonClickHandler = () => {
     inputRef.current?.click();
   };
 
+  const inputChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files) {
+      mutate(files);
+    }
+  };
+
+  const getChildren = () => {
+    // If value
+    if (value) {
+      if (value.length === 1) {
+        return value[0].originalName;
+      } else {
+        return `${value.length} загружено`;
+      }
+      // If not value but data
+    } else if (data?.data && isSuccess) {
+      if (data.data.length === 1) {
+        return data.data[0].originalName;
+      } else {
+        return `${data.data.length} загружено`;
+      }
+    } else if (children) {
+      return children;
+    } else {
+      return "Загрузить файлы";
+    }
+  };
+
   return (
     <>
-      <Button onClick={buttonClickHandler} variant="secondary" type="button">
-        {children || "Загрузить файл"}
+      <Button
+        onClick={buttonClickHandler}
+        loading={isLoading}
+        variant="secondary"
+        type="button"
+      >
+        {getChildren()}
       </Button>
-      <input className="hidden" type="file" ref={inputRef} {...props} />
+      <input
+        className="hidden"
+        onChange={inputChangeHandler}
+        type="file"
+        ref={inputRef}
+        multiple={multiple}
+        {...props}
+      />
+      <input className="hidden" type="text" />
     </>
   );
 };

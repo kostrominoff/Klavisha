@@ -3,6 +3,7 @@ import { AuthService } from "./auth.service";
 import { InstitutionsService } from "./institutuions.service";
 import { GroupsService } from "./groups.service";
 import { UsersService } from "./users.service";
+import { FilesService } from "./files.service";
 
 export const baseURL = process.env.API_URL || "http://localhost:3333";
 
@@ -29,6 +30,7 @@ const Api = {
   institutions: InstitutionsService(axiosInstance),
   groups: GroupsService(axiosInstance),
   users: UsersService(axiosInstance),
+  files: FilesService(axiosInstance),
 };
 
 export default Api;
