@@ -50,7 +50,9 @@ export class UserEntity implements User {
   })
   fullname: string;
 
-  @ManyToMany(() => InstitutionEntity, (institution) => institution.owners)
+  @ManyToMany(() => InstitutionEntity, (institution) => institution.owners, {
+    cascade: true,
+  })
   @JoinTable()
   institutions: InstitutionEntity[];
 

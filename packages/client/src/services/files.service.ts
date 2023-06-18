@@ -2,7 +2,7 @@ import { FileType } from "@klavisha/types";
 import { AxiosInstance } from "axios";
 
 export const FilesService = (axios: AxiosInstance) => ({
-  async upload(files: FileList) {
+  async upload(files: FileList | File[]) {
     const data = new FormData();
     for (let i = 0; i < files.length; i++) {
       data.append("files", files[i]);

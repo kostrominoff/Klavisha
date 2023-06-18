@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
 import * as cookieParser from 'cookie-parser';
+import { join } from 'path';
+import * as express from 'express';
 
 // TODO: ??? Save refresh tokens to the database
 
@@ -13,6 +15,8 @@ async function bootstrap() {
     origin: ['http://localhost:3000'],
     credentials: true,
   });
+
+  app.use('/uploads', express.static(join(__dirname, '..', '/uploads')));
 
   // Validation
   app.useGlobalPipes(new ValidationPipe());

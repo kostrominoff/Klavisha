@@ -35,10 +35,7 @@ export class InstitutionEntity implements Institution {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToMany(() => UserEntity, (user) => user.institutions, {
-    cascade: true,
-  })
-  @JoinTable()
+  @ManyToMany(() => UserEntity, (user) => user.institutions)
   owners: UserEntity[];
 
   @ManyToOne(() => GroupEntity, (group) => group.institution, {

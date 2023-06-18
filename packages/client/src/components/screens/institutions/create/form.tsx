@@ -100,7 +100,18 @@ const CreateInstitutionForm = ({ users }: Props) => {
           />
         )}
       />
-      <FileUploader accept="image/*" />
+      <Controller
+        name="photo"
+        control={control}
+        render={({ field: { onChange, value, ...field } }) => (
+          <FileUploader
+            accept="image/*"
+            onChange={(files) => files.length && onChange(files[0].filename)}
+            {...field}
+          />
+        )}
+      />
+      {/* <FileUploader accept="image/*" /> */}
       <Button type="submit" loading={isLoading}>
         Создать
       </Button>

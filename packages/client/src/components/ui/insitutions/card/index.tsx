@@ -14,9 +14,10 @@ const InstitutionCard = ({ institution }: Props) => {
       <Link href={`/institutions/${institution.id}`}>
         {institution.photo && (
           <Image
-            src={`${baseURL}/${institution.photo}`}
+            src={`${baseURL}/uploads/${institution.photo}`}
             alt={`Фотография ${institution.name}`}
-            fill
+            width={200}
+            height={200}
           />
         )}
         <Typography tag="h3" variant="h3">
