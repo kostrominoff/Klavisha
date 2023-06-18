@@ -1,7 +1,12 @@
 import {
   Controller,
+  Delete,
+  Get,
+  HttpCode,
   HttpStatus,
+  ParseArrayPipe,
   Post,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -64,5 +69,32 @@ export class FilesController {
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     return await this.filesService.create(userId, files);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Успешный ответ',
+  })
+  @ApiCookieAuth()
+  @Auth()
+  @Get()
+  async findAllByUser(@CurrentUser('id') userId: number) {
+    return await this.filesService.findAllByUser(userId);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Успешный ответ',
+  })
+  @ApiCookieAuth()
+  @HttpCode(HttpStatus.OK)
+  @Auth()
+  @Delete()
+  async delete(
+    @CurrentUser('id') userId: number,
+    @Query('id', new ParseArrayPipe({ items: Number, separator: ',' }))
+    filesId: number[],
+  ) {
+    return await this.filesService.delete(filesId, userId);
   }
 }

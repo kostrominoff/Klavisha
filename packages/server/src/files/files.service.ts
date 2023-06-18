@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FileEntity } from './entities/file.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
+import { unlinkSync } from 'fs';
+import { join } from 'path';
 
 @Injectable()
 export class FilesService {
@@ -20,5 +22,44 @@ export class FilesService {
         },
       })),
     );
+  }
+
+  async findAllByUser(id: number) {
+    return await this.fileRepository.find({
+      where: {
+        user: {
+          id,
+        },
+      },
+    });
+  }
+
+  async findAllById(filesId: number[], userId: number) {
+    return await this.fileRepository.find({
+      where: {
+        id: In(filesId),
+        user: {
+          id: userId,
+        },
+      },
+    });
+  }
+
+  async delete(files: number[], userId: number) {
+    const filesToDelete = await this.findAllById(files, userId);
+
+    const deletedFilesFromDisk = filesToDelete.map((file) => {
+      unlinkSync(join(__dirname, '..', '..', '/uploads', file.filename));
+      return file.id;
+    });
+
+    const deletedFiles = await this.fileRepository.delete({
+      id: In(deletedFilesFromDisk),
+      user: {
+        id: userId,
+      },
+    });
+
+    return deletedFiles;
   }
 }
