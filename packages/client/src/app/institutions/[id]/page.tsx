@@ -9,6 +9,13 @@ type Props = {
   params: Params;
 };
 
+export const generateMetadata = async ({ params }: Props) => {
+  const institution = await Api.institutions.findOne(+params.id);
+  return {
+    title: institution.name,
+  };
+};
+
 const InstitutionPage = async ({ params }: Props) => {
   if (isNaN(Number(params.id))) return notFound();
 

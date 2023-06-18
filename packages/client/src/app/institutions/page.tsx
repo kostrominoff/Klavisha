@@ -1,6 +1,11 @@
 import Institutions from "@/components/ui/insitutions";
 import { notFound } from "next/navigation";
 
+export const metadata = {
+  title: "Учебные заведения",
+  description: "Список учебных заведений",
+};
+
 export type SearchParams = {
   limit?: string;
   page?: string;
