@@ -67,7 +67,6 @@ export class FilesService {
 
   @Cron('0 0-23/1 * * *')
   async validateFiles() {
-    console.log('Removing');
     const allFiles = await readdir(join(__dirname, '..', '..', '/uploads'));
     const filesInDatabase = await this.fileRepository.find({
       where: {
