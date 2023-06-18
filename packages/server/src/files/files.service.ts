@@ -4,6 +4,8 @@ import { FileEntity } from './entities/file.entity';
 import { In, Repository } from 'typeorm';
 import { unlinkSync } from 'fs';
 import { join } from 'path';
+import { readdir } from 'fs/promises';
+import { Cron } from '@nestjs/schedule';
 
 @Injectable()
 export class FilesService {
@@ -61,5 +63,27 @@ export class FilesService {
     });
 
     return deletedFiles;
+  }
+
+  @Cron('0 0-23/1 * * *')
+  async validateFiles() {
+    console.log('Removing');
+    const allFiles = await readdir(join(__dirname, '..', '..', '/uploads'));
+    const filesInDatabase = await this.fileRepository.find({
+      where: {
+        filename: In(allFiles),
+      },
+    });
+
+    if (allFiles.length !== filesInDatabase.length) {
+      const filesToDelete = allFiles.filter(
+        (filename) =>
+          !filesInDatabase.some((file) => file.filename === filename),
+      );
+
+      filesToDelete.forEach((file) => {
+        unlinkSync(join(__dirname, '..', '..', '/uploads', file));
+      });
+    }
   }
 }
