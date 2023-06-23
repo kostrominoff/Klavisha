@@ -14,7 +14,9 @@ const Sublinks = ({ link }: Props) => {
   const pathname = usePathname();
   const [isOpen, { toggle: toggleIsOpen }] = useBoolean(
     link.sublinks?.some((sublink) =>
-      sublink.link === "/" ? pathname === "/" : pathname === sublink.link
+      sublink.link === "/"
+        ? pathname === "/"
+        : pathname.startsWith(sublink.link)
     )
   );
   return (

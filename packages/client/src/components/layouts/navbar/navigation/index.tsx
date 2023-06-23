@@ -32,14 +32,6 @@ const links: LinkWithSublinks[] = [
       },
     ],
   },
-  {
-    link: "/auth",
-    label: "Авторизация",
-    sublinks: [
-      { link: "/auth/login", label: "Вход" },
-      { link: "/auth/register", label: "Регистрация" },
-    ],
-  },
 ];
 
 const validateLink = (link: Link, user: UserResponse | null) => {
