@@ -32,14 +32,24 @@ const links: LinkWithSublinks[] = [
       },
     ],
   },
+  {
+    link: "/auth",
+    label: "Авторизация",
+    sublinks: [
+      { link: "/auth/login", label: "Вход" },
+      { link: "/auth/register", label: "Регистрация" },
+    ],
+  },
 ];
 
-const validateLink = (link: Link, user: UserResponse) => {
-  return link.roles ? roleValidator(link.roles, user) : true;
+const validateLink = (link: Link, user: UserResponse | null) => {
+  if (!link.roles?.length) return true;
+  else if (!user && link.roles.length) return false;
+  else return roleValidator(link.roles, user!);
 };
 
 const Navigation = async () => {
-  const user = await Api.auth.getMe();
+  const user = await Api.auth.getMe().catch(() => null);
 
   const navigationLinks = links.filter((link) => {
     if (!validateLink(link, user)) return false;
@@ -54,7 +64,7 @@ const Navigation = async () => {
   });
 
   return (
-    <nav>
+    <nav className="p-2">
       <ul>
         {navigationLinks.map((link, index) => (
           <>

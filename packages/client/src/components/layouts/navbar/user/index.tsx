@@ -33,9 +33,9 @@ const User = async () => {
     return (
       <Link
         className="block p-2 rounded-b-lg transition cursor-pointer hover:bg-slate-200"
-        href="/profile"
+        href="/auth/login"
       >
-        <Typography variant="text1" tag="p">
+        <Typography variant="text1" tag="p" className="font-medium">
           Вы не авторизованы
         </Typography>
         <Typography variant="text2" tag="p">
