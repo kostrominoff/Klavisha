@@ -1,9 +1,10 @@
 import { AxiosInstance } from "axios";
-import { ILoginUserDto, IRegisterUserDto, User } from "@klavisha/types";
+import { ILoginUserDto, IRegisterUserDto } from "@klavisha/types";
+import { UserResponse } from "@/types/responses/user.response";
 
 export const AuthService = (axios: AxiosInstance) => ({
   async getMe() {
-    const { data } = await axios.get<User>("/auth/me");
+    const { data } = await axios.get<UserResponse>("/auth/me");
     return data;
   },
   async login(dto: ILoginUserDto) {

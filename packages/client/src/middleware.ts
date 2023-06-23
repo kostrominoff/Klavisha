@@ -3,6 +3,7 @@ import { baseURL } from "./services";
 import { GuardRoles, Roles } from "@klavisha/types";
 import { NextURL } from "next/dist/server/web/next-url";
 import { UserResponse } from "./types/responses/user.response";
+import { roleValidator } from "./utils/role.validator";
 
 const parseCookie = (cookieName: string, cookies: string[]) =>
   cookies
@@ -72,20 +73,7 @@ export const middleware = async (request: NextRequest) => {
 
     if (!route.roles) return response;
 
-    const hasAccess = route.roles?.some((role) => {
-      switch (role) {
-        case GuardRoles.STUDENT:
-          return !!user.student;
-        case GuardRoles.TEACHER:
-          return !!user.teacher;
-        case GuardRoles.INSTITUTION_ADMIN:
-          return !!user.institutions;
-        case GuardRoles.ADMIN:
-          return user.role === Roles.ADMIN;
-      }
-    });
-
-    if (!hasAccess) return redirect;
+    if (!roleValidator(route.roles, user)) return redirect;
 
     return response;
   } catch {

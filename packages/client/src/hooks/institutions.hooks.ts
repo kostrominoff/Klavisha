@@ -1,5 +1,5 @@
 import Api from "@/services";
-import { errorHandler } from "@/utils/error.hangler";
+import { errorHandler } from "@/utils/error.handler";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 

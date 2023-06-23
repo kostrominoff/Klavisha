@@ -10,10 +10,10 @@ type Props = {
 // Add styles
 const Institutions = async ({ searchParams }: Props) => {
   const { institutions, count, pages } = await Api.institutions.findAll(
-    searchParams.name || "",
+    searchParams?.name || "",
     {
-      page: Number(searchParams.page) || 1,
-      limit: Number(searchParams.limit) || 10,
+      page: Number(searchParams?.page) || 1,
+      limit: Number(searchParams?.limit) || 10,
     }
   );
 
