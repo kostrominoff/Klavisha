@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { notify } from "@/components/layouts/toast";
 import Api from "@/services";
-import { errorHandler } from "@/utils/error.hangler";
+import { errorHandler } from "@/utils/error.handler";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -13,6 +13,7 @@ export const useLogin = () => {
     onSuccess: () => {
       notify("Авторизация прошла успешно!", "success");
       router.replace("/");
+      router.refresh();
     },
     onError: errorHandler,
   });
@@ -27,6 +28,7 @@ export const useRegister = () => {
     onSuccess: () => {
       notify("Регистрация прошла успешно!", "success");
       router.replace("/");
+      router.refresh();
     },
     onError: errorHandler,
   });
