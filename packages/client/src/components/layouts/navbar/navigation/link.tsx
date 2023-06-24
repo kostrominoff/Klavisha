@@ -41,9 +41,7 @@ const LinkItem = ({ single, link, isSublink, ...props }: Props) => {
           <Typography
             className={clsx({
               "font-semibold":
-                link.link === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(link.link),
+                link.link === "/" ? pathname === "/" : pathname === link.link,
             })}
             variant={isSublink ? "text2" : "text1"}
             tag="span"
