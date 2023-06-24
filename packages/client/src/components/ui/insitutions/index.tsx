@@ -7,7 +7,6 @@ type Props = {
 };
 
 // TODO: pagination and filter
-// Add styles
 const Institutions = async ({ searchParams }: Props) => {
   const { institutions, count, pages } = await Api.institutions.findAll(
     searchParams?.name || "",
@@ -19,7 +18,7 @@ const Institutions = async ({ searchParams }: Props) => {
 
   return (
     <section>
-      <ul>
+      <ul className="flex flex-wrap gap-3 justify-center">
         {institutions.map((institution) => (
           <InstitutionCard institution={institution} key={institution.id} />
         ))}

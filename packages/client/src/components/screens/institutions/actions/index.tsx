@@ -1,5 +1,5 @@
 import Typography from "@/components/ui/typography";
-import CreateInstitutionForm from "./form";
+import InstitutionForm from "./form";
 import Api from "@/services";
 
 const CreateInstitutionsScreen = async () => {
@@ -9,7 +9,7 @@ const CreateInstitutionsScreen = async () => {
       <Typography tag="h1" variant="h2">
         Создание уч. заведения
       </Typography>
-      <CreateInstitutionForm users={users} />
+      <InstitutionForm users={users} />
     </section>
   );
 };

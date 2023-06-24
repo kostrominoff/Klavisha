@@ -8,7 +8,6 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
   ManyToMany,
   OneToMany,
   OneToOne,
@@ -53,7 +52,6 @@ export class UserEntity implements User {
   @ManyToMany(() => InstitutionEntity, (institution) => institution.owners, {
     cascade: true,
   })
-  @JoinTable()
   institutions: InstitutionEntity[];
 
   @OneToOne(() => StudentEntity, (student) => student.user, {

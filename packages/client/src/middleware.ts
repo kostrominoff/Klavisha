@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { baseURL } from "./services";
-import { GuardRoles, Roles } from "@klavisha/types";
+import { GuardRoles } from "@klavisha/types";
 import { NextURL } from "next/dist/server/web/next-url";
 import { UserResponse } from "./types/responses/user.response";
 import { roleValidator } from "./utils/role.validator";

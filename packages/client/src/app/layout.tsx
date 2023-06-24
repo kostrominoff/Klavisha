@@ -18,7 +18,7 @@ const RootLayout = ({ children }: PropsWithChildren) => {
       <body className={clsx(inter.className, "grid gap-5 grid-cols-5")}>
         <QueryProvider>
           <Navbar />
-          <div className="col-span-4">{children}</div>
+          <main className="col-span-4 py-5">{children}</main>
         </QueryProvider>
         <Toaster />
       </body>

@@ -19,9 +19,11 @@ type Props = {
   value?: FileType[];
   onChange?: (files: FileType[]) => void;
   multiple?: boolean;
-} & Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "value" | "onChange">;
+} & Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "type" | "value" | "onChange" | "placeholder"
+>;
 
-// TODO: React hook form support
 // Create a storage
 const FileUploader = forwardRef<Ref, Props>(
   ({ children, multiple, value, onChange, ...props }, ref) => {

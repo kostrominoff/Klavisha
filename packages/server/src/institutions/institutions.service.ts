@@ -60,6 +60,9 @@ export class InstitutionsService {
       where: {
         id,
       },
+      relations: {
+        owners: true,
+      },
     });
   }
 

@@ -35,6 +35,7 @@ export class InstitutionEntity implements Institution {
   updatedAt: Date;
 
   @ManyToMany(() => UserEntity, (user) => user.institutions)
+  @JoinTable()
   owners: UserEntity[];
 
   @ManyToOne(() => GroupEntity, (group) => group.institution, {

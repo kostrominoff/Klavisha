@@ -1,7 +1,8 @@
-import InstitutionScreen from "@/components/screens/institutions/instiution";
-import InstitutionControls from "@/components/screens/institutions/instiution/controls";
+import CreateInstitutionForm from "@/components/screens/institutions/actions/form";
+import UpdateInstitutionsScreen from "@/components/screens/institutions/actions/update";
 import Api from "@/services";
 import { notFound } from "next/navigation";
+import React from "react";
 
 type Params = {
   id: string;
@@ -18,17 +19,11 @@ export const generateMetadata = async ({ params }: Props) => {
   };
 };
 
-const InstitutionPage = async ({ params }: Props) => {
+const UpdateInstitutionPage = async ({ params }: Props) => {
   if (isNaN(Number(params.id))) return notFound();
-
   const institution = await Api.institutions.findOne(+params.id);
 
-  return (
-    <>
-      <InstitutionControls institution={institution} />
-      <InstitutionScreen institution={institution} />
-    </>
-  );
+  return <UpdateInstitutionsScreen institution={institution} />;
 };
 
-export default InstitutionPage;
+export default UpdateInstitutionPage;

@@ -1,4 +1,4 @@
-import CreateInstitutionsScreen from "@/components/screens/institutions/create";
+import CreateInstitutionsScreen from "@/components/screens/institutions/actions";
 
 const CreateInstitutionPage = () => {
   return <CreateInstitutionsScreen />;
