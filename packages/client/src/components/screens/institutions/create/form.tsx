@@ -5,6 +5,7 @@ import Button from "@/components/ui/button";
 import Dropdown from "@/components/ui/dropdown";
 import Input from "@/components/ui/input";
 import FileUploader from "@/components/ui/input/file";
+import MarkdownEditor from "@/components/ui/markdown-editor";
 import { useAsyncOptions } from "@/hooks/async-options.hook";
 import { useBoolean } from "@/hooks/boolean.hook";
 import { useCreateInstitution } from "@/hooks/institutions.hooks";
@@ -121,17 +122,15 @@ const CreateInstitutionForm = ({ users }: Props) => {
         Описание
       </Button>
       <Modal
-        title="Example modal"
+        title="Описание"
         isOpen={isModalOpen}
         onClose={setIsModalOpenFalse}
-        footer={
-          <>
-            <Button variant="secondary">Отменить</Button>
-            <Button>Сохранить</Button>
-          </>
-        }
       >
-        Hello
+        <Controller
+          name="description"
+          control={control}
+          render={({ field }) => <MarkdownEditor {...field} />}
+        />
       </Modal>
       <Button type="submit" loading={isLoading}>
         Создать
