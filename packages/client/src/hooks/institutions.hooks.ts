@@ -10,6 +10,7 @@ export const useCreateInstitution = () => {
     mutationKey: ["Institution"],
     onSuccess: () => {
       router.replace("/institutions");
+      router.refresh();
     },
     onError: errorHandler,
   });
