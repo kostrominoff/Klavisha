@@ -10,6 +10,7 @@ import {
 import Button from "../../button";
 import { useFilesUpload } from "@/hooks/files.hooks";
 import { FileType } from "@klavisha/types";
+import Api from "@/services";
 
 type Ref = {
   click: () => void;
@@ -17,6 +18,7 @@ type Ref = {
 
 type Props = {
   value?: FileType[];
+  stringValues?: string[];
   onChange?: (files: FileType[]) => void;
   multiple?: boolean;
 } & Omit<
@@ -26,8 +28,19 @@ type Props = {
 
 // Create a storage
 const FileUploader = forwardRef<Ref, Props>(
-  ({ children, multiple, value, onChange, ...props }, ref) => {
+  ({ children, multiple, stringValues, value, onChange, ...props }, ref) => {
     const [localFiles, setLocalFiles] = useState<FileType[]>(value || []);
+
+    useEffect(() => {
+      const getFiles = async () => {
+        if (!stringValues) return;
+        try {
+          const files = await Api.files.findAllByFilenames(stringValues);
+          setLocalFiles(files);
+        } catch {}
+      };
+      getFiles();
+    }, [stringValues]);
 
     const { mutateAsync, isLoading, isSuccess } = useFilesUpload();
     const inputRef = useRef<HTMLInputElement>(null);
@@ -69,7 +82,7 @@ const FileUploader = forwardRef<Ref, Props>(
           return `${value.length} загружено`;
         }
         // If not value but data
-      } else if (localFiles && isSuccess) {
+      } else if (localFiles && (isSuccess || stringValues)) {
         if (localFiles.length === 1) {
           return localFiles[0].originalName;
         } else {

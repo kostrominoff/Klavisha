@@ -14,4 +14,18 @@ export const FilesService = (axios: AxiosInstance) => ({
       },
     });
   },
+  async findOneByFilename(filename: string) {
+    const { data } = await axios.get<FileType>(
+      `/files/oneByFilename/${filename}`
+    );
+    return data;
+  },
+  async findAllByFilenames(filenames: string[]) {
+    const { data } = await axios.get<FileType[]>("/files/manyByFilenames", {
+      params: {
+        filenames: filenames.join(","),
+      },
+    });
+    return data;
+  },
 });

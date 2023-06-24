@@ -167,7 +167,7 @@ const Dropdown = <T,>({
       })}
     >
       <div
-        className="inline-block relative"
+        className="inline-block relative w-full"
         onFocus={open}
         onBlur={blurHandler}
       >

@@ -90,7 +90,7 @@ const InstitutionForm = ({ users, defaultValues }: Props) => {
         />
       </Modal>
       <form
-        className="flex flex-col gap-3"
+        className="flex flex-col gap-3 max-w-[297px]"
         onSubmit={handleSubmit(submitHandler)}
       >
         <Input
@@ -118,6 +118,7 @@ const InstitutionForm = ({ users, defaultValues }: Props) => {
               customRef={ref}
               multiple
               disableFilter
+              fullWidth
               {...field}
             />
           )}
@@ -131,7 +132,7 @@ const InstitutionForm = ({ users, defaultValues }: Props) => {
           render={({ field: { onChange, value, ...field } }) => (
             <FileUploader
               accept="image/*"
-              // value={defaultValues?.photo && [defaultValues?.photo]}
+              stringValues={value ? [value] : undefined}
               onChange={(files) => files.length && onChange(files[0].filename)}
               {...field}
             >

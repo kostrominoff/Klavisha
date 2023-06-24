@@ -57,7 +57,7 @@ const Button = ({
     <button
       className={clsx(
         style.main,
-        "flex flex-row justify-center items-center",
+        "flex flex-row justify-center items-center text-ellipsis overflow-hidden whitespace-nowrap",
         {
           [style.primary]: variant === "primary" && !loading && !disabled,
           [style.secondary]: variant === "secondary" && !loading && !disabled,
@@ -84,7 +84,9 @@ const Button = ({
       disabled={disabled || loading}
       {...props}
     >
-      {!onlyIcon && children}
+      <span className="overflow-hidden text-ellipsis">
+        {!onlyIcon && children}
+      </span>
       <AnimatePresence>
         {onlyIcon && !loading && (
           <span
