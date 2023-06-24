@@ -46,8 +46,6 @@ const makeOptionsFn = (users: UsersResponse[]) =>
 const filterFn = async (name: string) =>
   (await Api.users.findAll({ name })).users;
 
-// TODO: Initial value of file uploader
-// Use file id instead of link
 const InstitutionForm = ({ users, defaultValues }: Props) => {
   const { options, filter, setFilter } = useAsyncOptions({
     initialData: users,
