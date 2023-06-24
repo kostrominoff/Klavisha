@@ -1,5 +1,7 @@
-import Api from "@/services";
+import Api, { baseURL } from "@/services";
+import Image from "next/image";
 import { notFound } from "next/navigation";
+import ReactMarkdown from "react-markdown";
 
 type Params = {
   id: string;
@@ -21,7 +23,22 @@ const InstitutionPage = async ({ params }: Props) => {
 
   const institution = await Api.institutions.findOne(+params.id);
 
-  return <div>{institution.name}</div>;
+  return (
+    <div className="prose prose-slate">
+      {institution.photo && (
+        <Image
+          src={`${baseURL}/uploads/${institution.photo}`}
+          alt={institution.name}
+          width={600}
+          height={300}
+        />
+      )}
+      <h1>{institution.name}</h1>
+      {institution.description && (
+        <ReactMarkdown>{institution.description}</ReactMarkdown>
+      )}
+    </div>
+  );
 };
 
 export default InstitutionPage;

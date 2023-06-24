@@ -17,7 +17,7 @@ type Props = {
   tag?: TypographyTag;
   variant?: TypographyVariant;
   children?: ReactNode;
-  className?: string;
+  customColor?: boolean;
 } & HTMLAttributes<HTMLElement>;
 
 const Typography = ({
@@ -25,21 +25,26 @@ const Typography = ({
   variant = "text1",
   tag: Tag = "p",
   className,
+  customColor,
   ...props
 }: Props) => {
   return (
     <Tag
-      className={clsx(className, "text-slate-900", {
-        "font-semibold md:text-5xl max-md:text-4xl": variant === "h1",
-        "font-semibold md:text-4xl max-md:text-3xl": variant === "h2",
-        "font-semibold md:text-3xl max-md:text-2xl": variant === "h3",
-        "font-semibold md:text-2xl max-md:text-xl": variant === "h4",
-        "font-semibold text-xl": variant === "h5",
-        "text-lg": variant === "text1",
-        "text-base": variant === "text2",
-        "text-sm": variant === "text3",
-        "text-xs": variant === "text4",
-      })}
+      className={clsx(
+        {
+          "text-slate-900": !customColor,
+          "font-semibold md:text-5xl max-md:text-4xl": variant === "h1",
+          "font-semibold md:text-4xl max-md:text-3xl": variant === "h2",
+          "font-semibold md:text-3xl max-md:text-2xl": variant === "h3",
+          "font-semibold md:text-2xl max-md:text-xl": variant === "h4",
+          "font-semibold text-xl": variant === "h5",
+          "text-lg": variant === "text1",
+          "text-base": variant === "text2",
+          "text-sm": variant === "text3",
+          "text-xs": variant === "text4",
+        },
+        className
+      )}
       {...props}
     >
       {children}
