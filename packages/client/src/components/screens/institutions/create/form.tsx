@@ -1,10 +1,12 @@
 "use client";
 
+import Modal from "@/components/layouts/modal";
 import Button from "@/components/ui/button";
 import Dropdown from "@/components/ui/dropdown";
 import Input from "@/components/ui/input";
 import FileUploader from "@/components/ui/input/file";
 import { useAsyncOptions } from "@/hooks/async-options.hook";
+import { useBoolean } from "@/hooks/boolean.hook";
 import { useCreateInstitution } from "@/hooks/institutions.hooks";
 import Api from "@/services";
 import { UsersResponse } from "@/types/responses/user.response";
@@ -52,10 +54,14 @@ const CreateInstitutionForm = ({ users }: Props) => {
     resolver: yupResolver(schema),
   });
 
+  const [
+    isModalOpen,
+    { setFalse: setIsModalOpenFalse, setTrue: setIsModalOpenTrue },
+  ] = useBoolean(false);
+
   const { mutate, isLoading } = useCreateInstitution();
 
   const submitHandler: SubmitHandler<FormData> = (data) => {
-    console.log(data);
     mutate(data);
   };
 
@@ -111,7 +117,22 @@ const CreateInstitutionForm = ({ users }: Props) => {
           />
         )}
       />
-      {/* <FileUploader accept="image/*" /> */}
+      <Button onClick={setIsModalOpenTrue} type="button" variant="secondary">
+        Описание
+      </Button>
+      <Modal
+        title="Example modal"
+        isOpen={isModalOpen}
+        onClose={setIsModalOpenFalse}
+        footer={
+          <>
+            <Button variant="secondary">Отменить</Button>
+            <Button>Сохранить</Button>
+          </>
+        }
+      >
+        Hello
+      </Modal>
       <Button type="submit" loading={isLoading}>
         Создать
       </Button>

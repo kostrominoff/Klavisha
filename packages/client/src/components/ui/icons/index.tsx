@@ -10,7 +10,7 @@ import Eye from "./eye.svg";
 import EyeOff from "./eye-off.svg";
 import NotifySuccess from "./notify-success.svg";
 import NotifyError from "./notify-error.svg";
-import { Status } from "@/components/layouts/toast";
+import Close from "./close.svg";
 
 type ButtonLoadingProps = {
   primary?: boolean;
@@ -34,12 +34,9 @@ const Icons = {
   checkbox: () => <Checkbox />,
   eye: () => <Eye />,
   eyeOff: () => <EyeOff />,
-  // notifyIcon: (status: Status) => {
-  //   if (status === "success") return <NotifySuccess />;
-  //   else return <NotifyError />;
-  // },
   notifySuccess: () => <NotifySuccess />,
   notifyError: () => <NotifyError />,
+  close: () => <Close />,
 };
 
 export default Icons;
