@@ -11,19 +11,27 @@ const parseCookie = (cookieName: string, cookies: string[]) =>
     ?.match(new RegExp(`^${cookieName}=(.+?);`))?.[1];
 
 type ProtectedRoute = {
-  path: string;
+  path: string | RegExp;
   roles?: GuardRoles[];
 };
 
 const protectedRoutes: ProtectedRoute[] = [
   { path: "/auth" },
   { path: "/institutions/create", roles: [GuardRoles.ADMIN] },
+  {
+    path: /\/institutions\/\S\/update/,
+    roles: [GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN],
+  },
 ];
 
 export const middleware = async (request: NextRequest) => {
   const route = protectedRoutes.find((route) =>
-    request.nextUrl.pathname.startsWith(route.path)
+    typeof route.path === "string"
+      ? request.nextUrl.pathname.startsWith(route.path)
+      : route.path.test(request.nextUrl.pathname)
   );
+
+  console.log(request.nextUrl.pathname);
 
   if (!route) return NextResponse.next();
 
@@ -35,7 +43,12 @@ export const middleware = async (request: NextRequest) => {
     });
 
     if (!res.ok) {
-      if (route.path.startsWith("/auth")) return NextResponse.next();
+      if (
+        typeof route.path === "string"
+          ? route.path.startsWith("/auth")
+          : route.path.test("/auth")
+      )
+        return NextResponse.next();
       else return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
@@ -69,7 +82,13 @@ export const middleware = async (request: NextRequest) => {
 
     const user: UserResponse = await res.json();
 
-    if (route.path.startsWith("/auth") && user) return redirect;
+    if (
+      (typeof route.path === "string"
+        ? route.path.startsWith("/auth")
+        : route.path.test("/auth")) &&
+      user
+    )
+      return redirect;
 
     if (!route.roles) return response;
 
