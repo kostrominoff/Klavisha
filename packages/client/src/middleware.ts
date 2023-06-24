@@ -19,7 +19,7 @@ const protectedRoutes: ProtectedRoute[] = [
   { path: "/auth" },
   { path: "/institutions/create", roles: [GuardRoles.ADMIN] },
   {
-    path: /\/institutions\/\S\/update/,
+    path: /\/institutions\/\S+\/update/,
     roles: [GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN],
   },
 ];
