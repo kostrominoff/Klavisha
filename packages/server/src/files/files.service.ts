@@ -36,6 +36,22 @@ export class FilesService {
     });
   }
 
+  async findOneByFilename(filename: string) {
+    return await this.fileRepository.findOne({
+      where: {
+        filename,
+      },
+    });
+  }
+
+  async findAllByFilenames(filenames: string[]) {
+    return await this.fileRepository.find({
+      where: {
+        filename: In(filenames),
+      },
+    });
+  }
+
   async findAllById(filesId: number[], userId: number) {
     return await this.fileRepository.find({
       where: {

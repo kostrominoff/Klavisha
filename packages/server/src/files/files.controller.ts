@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
   ParseArrayPipe,
   Post,
   Query,
@@ -80,6 +81,19 @@ export class FilesController {
   @Get()
   async findAllByUser(@CurrentUser('id') userId: number) {
     return await this.filesService.findAllByUser(userId);
+  }
+
+  @Get('/oneByFilename/:filename')
+  async findOneByFilename(@Param('filename') filename: string) {
+    return await this.filesService.findOneByFilename(filename);
+  }
+
+  @Get('/manyByFilenames')
+  async findAllByFilenames(
+    @Query('filenames', new ParseArrayPipe({ items: String, separator: ',' }))
+    filenames: string[],
+  ) {
+    return await this.filesService.findAllByFilenames(filenames);
   }
 
   @ApiResponse({
