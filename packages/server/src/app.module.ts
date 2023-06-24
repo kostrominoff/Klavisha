@@ -9,9 +9,11 @@ import { GroupsModule } from './groups/groups.module';
 import { StudentsModule } from './students/students.module';
 import { TeachersModule } from './teachers/teachers.module';
 import { FilesModule } from './files/files.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

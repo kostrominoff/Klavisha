@@ -1,7 +1,13 @@
 import {
   Controller,
+  Delete,
+  Get,
+  HttpCode,
   HttpStatus,
+  Param,
+  ParseArrayPipe,
   Post,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -64,5 +70,45 @@ export class FilesController {
     @UploadedFiles() files: Express.Multer.File[],
   ) {
     return await this.filesService.create(userId, files);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Успешный ответ',
+  })
+  @ApiCookieAuth()
+  @Auth()
+  @Get()
+  async findAllByUser(@CurrentUser('id') userId: number) {
+    return await this.filesService.findAllByUser(userId);
+  }
+
+  @Get('/oneByFilename/:filename')
+  async findOneByFilename(@Param('filename') filename: string) {
+    return await this.filesService.findOneByFilename(filename);
+  }
+
+  @Get('/manyByFilenames')
+  async findAllByFilenames(
+    @Query('filenames', new ParseArrayPipe({ items: String, separator: ',' }))
+    filenames: string[],
+  ) {
+    return await this.filesService.findAllByFilenames(filenames);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Успешный ответ',
+  })
+  @ApiCookieAuth()
+  @HttpCode(HttpStatus.OK)
+  @Auth()
+  @Delete()
+  async delete(
+    @CurrentUser('id') userId: number,
+    @Query('id', new ParseArrayPipe({ items: Number, separator: ',' }))
+    filesId: number[],
+  ) {
+    return await this.filesService.delete(filesId, userId);
   }
 }
