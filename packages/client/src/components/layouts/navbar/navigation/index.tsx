@@ -61,9 +61,9 @@ const Navigation = async () => {
         {navigationLinks.map((link, index) => (
           <>
             {link.sublinks ? (
-              <Sublinks link={link} key={link.link} />
+              <Sublinks link={link} key={`${link.link}-sublink`} />
             ) : (
-              <LinkItem key={index} link={link} single />
+              <LinkItem key={`${index}${link.link}`} link={link} single />
             )}
           </>
         ))}

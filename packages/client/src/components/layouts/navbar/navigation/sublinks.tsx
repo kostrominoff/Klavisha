@@ -19,13 +19,27 @@ const Sublinks = ({ link }: Props) => {
   );
   return (
     <ul>
-      <LinkItem link={link} onClick={toggleIsOpen} />
+      <LinkItem
+        link={link}
+        key={`${link.link}-button`}
+        onClick={toggleIsOpen}
+      />
       <AnimatePresence>
         {isOpen && (
           <motion.ul className="pl-3">
-            <LinkItem link={link} isSublink single />
-            {link.sublinks?.map((sublink) => (
-              <LinkItem key={sublink.link} link={sublink} isSublink single />
+            <LinkItem
+              key={`${link.link}-fitst-link`}
+              link={link}
+              isSublink
+              single
+            />
+            {link.sublinks?.map((sublink, index) => (
+              <LinkItem
+                key={`${sublink.link}${index}-sublink`}
+                link={sublink}
+                isSublink
+                single
+              />
             ))}
           </motion.ul>
         )}

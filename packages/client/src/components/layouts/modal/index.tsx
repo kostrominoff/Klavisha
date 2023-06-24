@@ -20,11 +20,11 @@ const Modal = ({ title, isOpen, onClose, footer, children }: Props) => {
     setIsMounted(true);
   }, []);
 
-  if (!document) return null;
+  if (!isMounted) return null;
 
   return createPortal(
     <AnimatePresence>
-      {isMounted && isOpen && (
+      {isOpen && (
         <motion.div
           initial={{
             opacity: 0,
