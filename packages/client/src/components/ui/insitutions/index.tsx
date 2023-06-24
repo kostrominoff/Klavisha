@@ -7,7 +7,6 @@ type Props = {
 };
 
 // TODO: pagination and filter
-// Add styles
 const Institutions = async ({ searchParams }: Props) => {
   const { institutions, count, pages } = await Api.institutions.findAll(
     searchParams?.name || "",

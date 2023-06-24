@@ -20,6 +20,8 @@ const Modal = ({ title, isOpen, onClose, footer, children }: Props) => {
     setIsMounted(true);
   }, []);
 
+  if (!document) return null;
+
   return createPortal(
     <AnimatePresence>
       {isMounted && isOpen && (
@@ -34,7 +36,7 @@ const Modal = ({ title, isOpen, onClose, footer, children }: Props) => {
             opacity: 0,
           }}
           onClick={onClose}
-          className="flex fixed z-50 justify-center items-center p-3 w-screen h-screen bg-opacity-40 bg-slate-900"
+          className="flex overflow-y-scroll fixed z-50 justify-center items-center p-3 w-screen h-screen bg-opacity-40 bg-slate-900"
         >
           <motion.div
             initial={{
@@ -48,7 +50,7 @@ const Modal = ({ title, isOpen, onClose, footer, children }: Props) => {
               translateY: 100,
             }}
             onClick={(e) => e.stopPropagation()}
-            className="max-w-4xl bg-white rounded-xl shadow min-w-[296px]"
+            className="overflow-y-scroll max-w-4xl bg-white rounded-xl shadow max-h-[97vh] min-w-[296px]"
           >
             <header className="flex gap-3 justify-between items-center py-1 pr-3 pl-8">
               <Typography

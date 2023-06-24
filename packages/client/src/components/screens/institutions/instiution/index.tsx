@@ -23,7 +23,11 @@ const InstitutionScreen = ({ institution }: Props) => {
           />
         )}
         <h1 className="mb-2">{institution.name}</h1>
-        <Typography tag="span" variant="text1" className="mt-2 font-semibold">
+        <Typography
+          tag="span"
+          variant="text1"
+          className="block mt-2 font-semibold"
+        >
           Город: {institution.city}
         </Typography>
         {institution.phone && (
@@ -31,7 +35,7 @@ const InstitutionScreen = ({ institution }: Props) => {
             <Typography
               tag="span"
               variant="text1"
-              className="mt-2 font-semibold"
+              className="block mt-2 font-semibold"
             >
               Телефон: {institution.phone}
             </Typography>
@@ -42,7 +46,7 @@ const InstitutionScreen = ({ institution }: Props) => {
             <Typography
               tag="span"
               variant="text1"
-              className="mt-2 font-semibold"
+              className="block mt-2 font-semibold"
             >
               Сайт: {institution.website}
             </Typography>

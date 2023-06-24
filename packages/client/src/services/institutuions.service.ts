@@ -1,6 +1,9 @@
 import { PaginationParams } from "@/types/pagination";
-import { InstitutionsFindAllResponse } from "@/types/responses/institutions.response";
-import { ICreateInstitutionDto, Institution } from "@klavisha/types";
+import {
+  InstitutionFindOneResponse,
+  InstitutionsFindAllResponse,
+} from "@/types/responses/institutions.response";
+import { ICreateInstitutionDto } from "@klavisha/types";
 import { AxiosInstance } from "axios";
 
 export const InstitutionsService = (axios: AxiosInstance) => ({
@@ -20,7 +23,12 @@ export const InstitutionsService = (axios: AxiosInstance) => ({
     return await axios.post("/institutions", dto);
   },
   async findOne(id: number) {
-    const { data } = await axios.get<Institution>(`/institutions/${id}`);
+    const { data } = await axios.get<InstitutionFindOneResponse>(
+      `/institutions/${id}`
+    );
     return data;
+  },
+  async delete(id: number) {
+    return await axios.delete(`/institutions/${id}`);
   },
 });

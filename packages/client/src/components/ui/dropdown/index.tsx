@@ -82,7 +82,7 @@ const Dropdown = <T,>({
   ...props
 }: DropdownProps<T> & { customRef?: Ref<HTMLInputElement> }) => {
   const [localValue, setLocalValue] = useState<T[] | T | null>(
-    value || multiple ? [] : null
+    value ? value : multiple ? [] : null
   );
   const [isOpen, { setTrue: open, setFalse: close }] = useBoolean();
   const [filter, setFilter] = useState(controlledFilter || "");
