@@ -19,7 +19,7 @@ const Institutions = async ({ searchParams }: Props) => {
 
   return (
     <section>
-      <ul>
+      <ul className="flex flex-wrap gap-3 justify-center">
         {institutions.map((institution) => (
           <InstitutionCard institution={institution} key={institution.id} />
         ))}

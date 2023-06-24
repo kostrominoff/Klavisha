@@ -74,53 +74,7 @@ const CreateInstitutionForm = ({ users }: Props) => {
 
   // TODO: Add photo uploader and create markdown editor
   return (
-    <form
-      className="flex flex-col gap-3"
-      onSubmit={handleSubmit(submitHandler)}
-    >
-      <Input
-        placeholder="Название"
-        error={errors.name?.message}
-        {...register("name")}
-      />
-      <Input
-        placeholder="Город"
-        error={errors.city?.message}
-        {...register("city")}
-      />
-      <Input placeholder="Номер телефона" {...register("phone")} />
-      <Input placeholder="Ссылка на сайт" {...register("website")} />
-      <Controller
-        name="owners"
-        control={control}
-        render={({ field: { ref, ...field } }) => (
-          <Dropdown
-            placeholder="Администраторы"
-            options={options}
-            filter={filter}
-            onFilterChange={setFilter}
-            error={errors.owners?.message}
-            customRef={ref}
-            multiple
-            disableFilter
-            {...field}
-          />
-        )}
-      />
-      <Controller
-        name="photo"
-        control={control}
-        render={({ field: { onChange, value, ...field } }) => (
-          <FileUploader
-            accept="image/*"
-            onChange={(files) => files.length && onChange(files[0].filename)}
-            {...field}
-          />
-        )}
-      />
-      <Button onClick={setIsModalOpenTrue} type="button" variant="secondary">
-        Описание
-      </Button>
+    <>
       <Modal
         title="Описание"
         isOpen={isModalOpen}
@@ -132,10 +86,60 @@ const CreateInstitutionForm = ({ users }: Props) => {
           render={({ field }) => <MarkdownEditor {...field} />}
         />
       </Modal>
-      <Button type="submit" loading={isLoading}>
-        Создать
-      </Button>
-    </form>
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={handleSubmit(submitHandler)}
+      >
+        <Input
+          placeholder="Название"
+          error={errors.name?.message}
+          {...register("name")}
+        />
+        <Input
+          placeholder="Город"
+          error={errors.city?.message}
+          {...register("city")}
+        />
+        <Input placeholder="Номер телефона" {...register("phone")} />
+        <Input placeholder="Ссылка на сайт" {...register("website")} />
+        <Controller
+          name="owners"
+          control={control}
+          render={({ field: { ref, ...field } }) => (
+            <Dropdown
+              placeholder="Администраторы"
+              options={options}
+              filter={filter}
+              onFilterChange={setFilter}
+              error={errors.owners?.message}
+              customRef={ref}
+              multiple
+              disableFilter
+              {...field}
+            />
+          )}
+        />
+        <Button onClick={setIsModalOpenTrue} type="button" variant="secondary">
+          Описание
+        </Button>
+        <Controller
+          name="photo"
+          control={control}
+          render={({ field: { onChange, value, ...field } }) => (
+            <FileUploader
+              accept="image/*"
+              onChange={(files) => files.length && onChange(files[0].filename)}
+              {...field}
+            >
+              Загрузить фотографию
+            </FileUploader>
+          )}
+        />
+        <Button type="submit" loading={isLoading}>
+          Создать
+        </Button>
+      </form>
+    </>
   );
 };
 
