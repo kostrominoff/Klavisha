@@ -19,11 +19,7 @@ const Sublinks = ({ link }: Props) => {
   );
   return (
     <ul>
-      <LinkItem
-        link={link}
-        key={`${link.link}-button`}
-        onClick={toggleIsOpen}
-      />
+      <LinkItem link={link} onClick={toggleIsOpen} />
       <AnimatePresence>
         {isOpen && (
           <motion.ul className="pl-3">

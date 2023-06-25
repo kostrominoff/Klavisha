@@ -15,10 +15,17 @@ export const metadata = {
 const RootLayout = ({ children }: PropsWithChildren) => {
   return (
     <html lang="ru">
-      <body className={clsx(inter.className, "grid gap-5 grid-cols-5")}>
+      <body
+        className={clsx(
+          inter.className,
+          "grid gap-5 max-md:grid-cols-5 md:grid-cols-[260px_repeat(4,minmax(0,1fr))]"
+        )}
+      >
         <QueryProvider>
           <Navbar />
-          <main className="col-span-4 py-5">{children}</main>
+          <main className="py-5 md:col-span-4 max-md:col-span-5">
+            {children}
+          </main>
         </QueryProvider>
         <Toaster />
       </body>

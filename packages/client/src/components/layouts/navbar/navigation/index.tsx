@@ -58,12 +58,12 @@ const Navigation = async () => {
   return (
     <nav className="p-2">
       <ul>
-        {navigationLinks.map((link, index) => (
+        {navigationLinks.map((link) => (
           <>
             {link.sublinks ? (
-              <Sublinks link={link} key={`${link.link}-sublink`} />
+              <Sublinks link={link} key={crypto.randomUUID()} />
             ) : (
-              <LinkItem key={`${index}${link.link}`} link={link} single />
+              <LinkItem key={crypto.randomUUID()} link={link} single />
             )}
           </>
         ))}

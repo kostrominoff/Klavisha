@@ -1,13 +1,23 @@
-import Navigation from "./navigation";
-import User from "./user";
+"use client";
 
-// TODO: Mobile bar and fixed width
+import Button from "@/components/ui/button";
+import Portal from "../portal";
+import Bar from "./bar";
+
+// TODO: Open and close mobile bar
 const Navbar = () => {
   return (
-    <aside className="col-span-1 min-h-screen rounded-r-3xl overflow-clip bg-slate-100">
-      <User />
-      <Navigation />
-    </aside>
+    <>
+      <Bar />
+      <Portal>
+        <Button
+          className="fixed right-2 bottom-2 z-50 md:hidden md:-z-50"
+          onlyIcon
+        >
+          OP
+        </Button>
+      </Portal>
+    </>
   );
 };
 
