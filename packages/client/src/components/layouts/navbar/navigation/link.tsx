@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import type { Link as LinkType } from ".";
-import { ButtonHTMLAttributes } from "react";
+import { ButtonHTMLAttributes, useContext } from "react";
 import Typography from "@/components/ui/typography";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import Icons from "@/components/ui/icons";
 import { motion } from "framer-motion";
+import { NavbarContext } from "../context";
 
 type SingleProps = {
   single: true;
@@ -24,6 +25,7 @@ type Props = {
 
 const LinkItem = ({ single, link, isSublink, ...props }: Props) => {
   const pathname = usePathname();
+  const { close } = useContext(NavbarContext);
 
   return (
     <motion.li
@@ -37,7 +39,7 @@ const LinkItem = ({ single, link, isSublink, ...props }: Props) => {
       exit={{ height: 0, marginBottom: 0, opacity: 0 }}
     >
       {single ? (
-        <Link href={link.link}>
+        <Link onClick={close} href={link.link}>
           <Typography
             className={clsx({
               "font-semibold":

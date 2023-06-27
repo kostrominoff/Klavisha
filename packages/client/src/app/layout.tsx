@@ -23,7 +23,7 @@ const RootLayout = ({ children }: PropsWithChildren) => {
       >
         <QueryProvider>
           <Navbar />
-          <main className="py-5 md:col-span-4 max-md:col-span-5">
+          <main className="py-5 px-2 md:col-span-4 max-md:col-span-5">
             {children}
           </main>
         </QueryProvider>
