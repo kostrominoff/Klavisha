@@ -3,8 +3,7 @@ import { IOption } from "@/components/ui/dropdown/option.interface";
 import { useAsyncOptions } from "@/hooks/async-options.hook";
 import Api from "@/services";
 import { InstitutionsResponse } from "@/types/responses/institutions.response";
-import { IRegisterUserDto } from "@klavisha/types";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Control, Controller, UseFormResetField } from "react-hook-form";
 
@@ -19,8 +18,8 @@ const filterFn = async (filter: string) =>
 
 type Props = {
   institutions: InstitutionsResponse;
-  control: Control<IRegisterUserDto>;
-  resetField: UseFormResetField<IRegisterUserDto>;
+  control: Control<any>;
+  resetField: UseFormResetField<any>;
   error?: string;
 };
 
@@ -67,7 +66,23 @@ const GroupSelector = ({ institutions, control, error, resetField }: Props) => {
   };
 
   return (
-    <div>
+    <motion.div
+      initial={{
+        height: 0,
+        opacity: 0,
+        marginTop: 0,
+      }}
+      animate={{
+        height: "auto",
+        opacity: 1,
+        marginTop: "0.75rem",
+      }}
+      exit={{
+        height: 0,
+        opacity: 0,
+        marginTop: 0,
+      }}
+    >
       <Dropdown
         value={institutionId}
         onChange={setInstitutionId}
@@ -111,7 +126,7 @@ const GroupSelector = ({ institutions, control, error, resetField }: Props) => {
           />
         </motion.div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

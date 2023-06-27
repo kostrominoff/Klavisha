@@ -1,5 +1,6 @@
 import { Pagination, PaginationParams } from "@/types/pagination";
 import { UsersResponse } from "@/types/responses/user.response";
+import { ICreateUserDto } from "@klavisha/types";
 import { AxiosInstance } from "axios";
 
 type SearchParams = {
@@ -19,5 +20,8 @@ export const UsersService = (axios: AxiosInstance) => ({
       }
     );
     return data;
+  },
+  async create(dto: ICreateUserDto) {
+    return await axios.post("/users", dto);
   },
 });

@@ -2,12 +2,11 @@ import RegisterScreen from "@/components/screens/auth/register";
 import Api from "@/services";
 
 const RegisterPage = async () => {
-  try {
-    const institutions = await Api.institutions.findAll();
-    return <RegisterScreen institutions={institutions.institutions} />;
-  } catch {
-    return <div></div>;
-  }
+  const institutions = await Api.institutions.findAll().catch(() => ({
+    institutions: [],
+  }));
+
+  return <RegisterScreen institutions={institutions.institutions} />;
 };
 
 export default RegisterPage;

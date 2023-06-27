@@ -104,8 +104,8 @@ export class UsersService {
 
     const user = await this.userRepository.save({
       ...dto,
-      student: {
-        group: groupId && {
+      student: groupId && {
+        group: {
           id: groupId,
         },
         subgroup: subgroup,

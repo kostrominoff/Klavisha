@@ -5,7 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinTable,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -26,7 +26,7 @@ export class StudentEntity implements Student {
   @ManyToOne(() => GroupEntity, (group) => group.students, {
     cascade: true,
   })
-  @JoinTable()
+  @JoinColumn()
   group: GroupEntity;
 
   @OneToOne(() => UserEntity, (user) => user.student)

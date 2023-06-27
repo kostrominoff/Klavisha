@@ -21,7 +21,7 @@ const InstitutionControls = async ({ institution }: Props) => {
     }
 
     return (
-      <section className="flex gap-3 py-5 mx-auto max-w-3xl">
+      <section className="flex gap-3 mx-auto mb-5 max-w-3xl">
         <Link
           className={clsx(
             ButtonStyles("primary"),

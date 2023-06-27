@@ -32,6 +32,12 @@ const links: LinkWithSublinks[] = [
       },
     ],
   },
+  {
+    label: "Пользователи",
+    link: "/users",
+    roles: [GuardRoles.ADMIN, GuardRoles.INSTITUTION_ADMIN],
+    sublinks: [{ label: "Создать", link: "/users/create" }],
+  },
 ];
 
 const validateLink = (link: Link, user: UserResponse | null) => {

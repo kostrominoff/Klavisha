@@ -1,7 +1,6 @@
 "use client";
 
 import Button from "@/components/ui/button";
-import GroupSelector from "./group-selector";
 import { InferType, ObjectSchema, number, object, string } from "yup";
 import { IRegisterUserDto } from "@klavisha/types";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -10,6 +9,7 @@ import Input from "@/components/ui/input";
 import { InstitutionsResponse } from "@/types/responses/institutions.response";
 import Password from "@/components/ui/input/password";
 import { useRegister } from "@/hooks/auth.hooks";
+import GroupSelector from "@/components/ui/group-selector";
 
 type Props = {
   institutions: InstitutionsResponse;
