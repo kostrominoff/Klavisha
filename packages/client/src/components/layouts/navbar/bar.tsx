@@ -6,6 +6,7 @@ import Button from "@/components/ui/button";
 import { PropsWithChildren, useEffect } from "react";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
+import Icons from "@/components/ui/icons";
 
 const Bar = ({ children }: PropsWithChildren) => {
   const [isOpen, { toggle: toggleIsOpen, setFalse: close }] = useBoolean();
@@ -35,7 +36,7 @@ const Bar = ({ children }: PropsWithChildren) => {
           onClick={toggleIsOpen}
           onlyIcon
         >
-          OP
+          <Icons.menu />
         </Button>
       </Portal>
     </>

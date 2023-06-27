@@ -11,6 +11,7 @@ import EyeOff from "./eye-off.svg";
 import NotifySuccess from "./notify-success.svg";
 import NotifyError from "./notify-error.svg";
 import Close from "./close.svg";
+import Menu from "./menu.svg";
 
 type ButtonLoadingProps = {
   primary?: boolean;
@@ -37,6 +38,7 @@ const Icons = {
   notifySuccess: () => <NotifySuccess />,
   notifyError: () => <NotifyError />,
   close: () => <Close />,
+  menu: () => <Menu />,
 };
 
 export default Icons;
