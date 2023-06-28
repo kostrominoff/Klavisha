@@ -2,6 +2,7 @@ import { PaginationParams } from "@/types/pagination";
 import {
   InstitutionFindOneResponse,
   InstitutionsFindAllResponse,
+  InstitutionsResponse,
 } from "@/types/responses/institutions.response";
 import { ICreateInstitutionDto } from "@klavisha/types";
 import { AxiosInstance } from "axios";
@@ -16,6 +17,12 @@ export const InstitutionsService = (axios: AxiosInstance) => ({
           ...pagination,
         },
       }
+    );
+    return data;
+  },
+  async findAllByUser() {
+    const { data } = await axios.get<InstitutionsResponse>(
+      "/institutions/byUser"
     );
     return data;
   },

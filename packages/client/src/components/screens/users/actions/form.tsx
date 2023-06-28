@@ -45,6 +45,7 @@ type FormData = InferType<typeof schema>;
 
 type Props = {
   institutions: InstitutionsResponse;
+  isAdmin: boolean;
 };
 
 const makeOptionsFn = (institutions: InstitutionsResponse): IOption<number>[] =>
@@ -53,10 +54,12 @@ const makeOptionsFn = (institutions: InstitutionsResponse): IOption<number>[] =>
     label: `${institution.name} (${institution.city})`,
   }));
 
-const filterFn = async (filter: string) =>
+const filterFnAdmin = async (filter: string) =>
   (await Api.institutions.findAll(filter)).institutions;
 
-const UserForm = ({ institutions }: Props) => {
+const filterFn = async () => await Api.institutions.findAllByUser();
+
+const UserForm = ({ institutions, isAdmin }: Props) => {
   const [isStudent, { setTrue: setIsStudent, setFalse: setIsNotStudent }] =
     useBoolean();
 
@@ -68,7 +71,7 @@ const UserForm = ({ institutions }: Props) => {
   const { options, filter, setFilter } = useAsyncOptions({
     initialData: institutions,
     makeOptionsFn,
-    filterFn,
+    filterFn: isAdmin ? filterFnAdmin : filterFn,
   });
 
   const { mutate, isLoading } = useCreateUser();
@@ -93,10 +96,10 @@ const UserForm = ({ institutions }: Props) => {
           <Dropdown
             customRef={ref}
             options={options}
-            filter={filter}
-            onFilterChange={setFilter}
+            filter={isAdmin ? filter : undefined}
+            onFilterChange={isAdmin ? setFilter : undefined}
             placeholder="Администратор уч. заведений"
-            disableFilter
+            disableFilter={isAdmin}
             multiple
             {...field}
           />
@@ -148,19 +151,21 @@ const UserForm = ({ institutions }: Props) => {
           )}
         </AnimatePresence>
       </div>
-      <Controller
-        name="role"
-        control={control}
-        render={({ field: { onChange, ...field } }) => (
-          <Checkbox
-            label="Администратор сайта"
-            onChange={(e) =>
-              onChange(e.target.checked ? Roles.ADMIN : Roles.USER)
-            }
-            {...field}
-          />
-        )}
-      />
+      {isAdmin && (
+        <Controller
+          name="role"
+          control={control}
+          render={({ field: { onChange, ...field } }) => (
+            <Checkbox
+              label="Администратор сайта"
+              onChange={(e) =>
+                onChange(e.target.checked ? Roles.ADMIN : Roles.USER)
+              }
+              {...field}
+            />
+          )}
+        />
+      )}
       <Button loading={isLoading} type="submit">
         Создать
       </Button>

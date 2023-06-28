@@ -55,6 +55,16 @@ export class InstitutionsService {
     };
   }
 
+  async findAllByUser(id: number) {
+    return await this.institutionRepository.find({
+      where: {
+        owners: {
+          id: id,
+        },
+      },
+    });
+  }
+
   async findOneById(id: number) {
     return await this.institutionRepository.findOne({
       where: {

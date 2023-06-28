@@ -67,6 +67,16 @@ export class InstitutionsController {
     status: HttpStatus.OK,
     description: 'Успешный ответ',
   })
+  @Auth([GuardRoles.INSTITUTION_ADMIN])
+  @Get('byUser')
+  async findAllByUser(@CurrentUser('id') id: number) {
+    return await this.institutionsService.findAllByUser(id);
+  }
+
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Успешный ответ',
+  })
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.institutionsService.findOneById(id);

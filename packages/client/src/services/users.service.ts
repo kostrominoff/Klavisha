@@ -10,7 +10,7 @@ type SearchParams = {
 
 export const UsersService = (axios: AxiosInstance) => ({
   async findAll(params?: SearchParams, pagination?: PaginationParams) {
-    const { data } = await axios.get<Pagination<{ users: UsersResponse[] }>>(
+    const { data } = await axios.get<Pagination<{ users: UsersResponse }>>(
       "/users",
       {
         params: {

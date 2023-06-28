@@ -13,7 +13,7 @@ export type UserResponse = {
   } | null;
 } & UserWithoutPassword;
 
-export type UsersResponse = {
+export type UsersResponse = ({
   student:
     | (Pick<Student, "id" | "subgroup"> & {
         group: Pick<Group, "id" | "name">;
@@ -26,4 +26,4 @@ export type UsersResponse = {
     };
   } | null;
   institutions: Institution[];
-} & Omit<UserWithoutPassword, "createdAt" | "updatedAt">;
+} & Omit<UserWithoutPassword, "createdAt" | "updatedAt">)[];
